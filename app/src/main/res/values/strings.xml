@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">DecentWork</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_link_signup">Sign Up</string>
+    <string name="title_activity_login">Login to the Decent Work</string>
+    <string name="title_activity_registration">Register to the Decent Work</string>
+    <string name="hint_email">Email:</string>
+    <string name="hint_password">Password:</string>
+    <string name="hint_last_name">Last name:</string>
+    <string name="hint_profession">Profession:</string>
+    <string name="hint_City">City:</string>
+    <string name="btn_sign_up">Register</string>
+    <string name="btn_link_login">Login</string>
+</resources>
