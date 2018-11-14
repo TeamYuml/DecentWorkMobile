@@ -8,7 +8,7 @@ import android.os.Bundle;
 /*
 * Start class for Mobile Application
 * created as SplashScreen style
-* */
+*/
 public class SplashScreen extends AppCompatActivity {
 
     @Override
