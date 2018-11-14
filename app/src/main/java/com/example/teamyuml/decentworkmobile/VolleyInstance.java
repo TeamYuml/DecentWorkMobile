@@ -20,6 +20,7 @@ public class VolleyInstance {
         if (mAppSingletonInstance == null) {
             mAppSingletonInstance = new VolleyInstance(context);
         }
+        
         return mAppSingletonInstance;
     }
 
@@ -29,10 +30,11 @@ public class VolleyInstance {
             // Activity or BroadcastReceiver if someone passes one in.
             mRequestQueue = Volley.newRequestQueue(mContext.getApplicationContext());
         }
+
         return mRequestQueue;
     }
 
-    public <T> void addToRequestQueue(Request<T> req,String tag) {
+    public <T> void addToRequestQueue(Request<T> req, String tag) {
         req.setTag(tag);
         getRequestQueue().add(req);
     }
