@@ -6,22 +6,18 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 /*
- * This class is responsible
- * for configuration of Volley package
+ * Class responsible for creating
+ * singleton instance
+ * and queued request from the server
  */
-public class AppSingleton {
-    private static AppSingleton mAppSingletonInstance;
+public class Singleton {
     private RequestQueue mRequestQueue;
+    private static Singleton mAppSingletonInstance;
     private static Context mContext;
 
-    private AppSingleton(Context context) {
-        mContext = context;
-        mRequestQueue = getRequestQueue();
-    }
-
-    public static synchronized AppSingleton getInstance(Context context) {
+    public static synchronized Singleton getInstance(Context context) {
         if (mAppSingletonInstance == null) {
-            mAppSingletonInstance = new AppSingleton(context);
+            mAppSingletonInstance = new Singleton(context);
         }
         return mAppSingletonInstance;
     }
@@ -38,6 +34,11 @@ public class AppSingleton {
     public <T> void addToRequestQueue(Request<T> req,String tag) {
         req.setTag(tag);
         getRequestQueue().add(req);
+    }
+
+    private Singleton(Context context) {
+        mContext = context;
+        mRequestQueue = getRequestQueue();
     }
 }
 
