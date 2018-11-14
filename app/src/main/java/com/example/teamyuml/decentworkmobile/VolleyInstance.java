@@ -10,14 +10,15 @@ import com.android.volley.toolbox.Volley;
  * singleton instance
  * and queued request from the server
  */
-public class Singleton {
+public class VolleyInstance {
     private RequestQueue mRequestQueue;
-    private static Singleton mAppSingletonInstance;
+    private static VolleyInstance mAppSingletonInstance;
     private static Context mContext;
 
-    public static synchronized Singleton getInstance(Context context) {
+
+    public static synchronized VolleyInstance getInstance(Context context) {
         if (mAppSingletonInstance == null) {
-            mAppSingletonInstance = new Singleton(context);
+            mAppSingletonInstance = new VolleyInstance(context);
         }
         return mAppSingletonInstance;
     }
@@ -36,9 +37,8 @@ public class Singleton {
         getRequestQueue().add(req);
     }
 
-    private Singleton(Context context) {
+    private VolleyInstance(Context context) {
         mContext = context;
         mRequestQueue = getRequestQueue();
     }
 }
-
