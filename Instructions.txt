@@ -1,0 +1,5 @@
+If you wanna generate SHA1 key pls go to command prompt and sue this command:
+keytool -genkey -v -keystore my-release-key.jks
+-keyalg RSA -keysize 2048 -validity 10000 -alias my-alias
+If you wanna read the SHA1 KEY please use this  command:
+keytool -exportcert -keystore path to release key  -list -v
