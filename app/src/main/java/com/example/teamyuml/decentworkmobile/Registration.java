@@ -143,7 +143,7 @@ public class Registration extends AppCompatActivity {
             }
         };
         // Adding request to request queue
-        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(strReq, cancel_req_tag);
+        VolleyInstance.getInstance(getApplicationContext()).addToRequestQueue(strReq, cancel_req_tag);
     }
 
     private void showDialog() {
