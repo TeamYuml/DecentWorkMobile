@@ -107,6 +107,7 @@ public class CreateJson {
      * @return String containing valid json.
      */
     private String intJson(Map.Entry param) {
+        // TODO: Check if this json is valid.
         return "'" + param.getKey() + "': " + param.getValue();
     }
 
