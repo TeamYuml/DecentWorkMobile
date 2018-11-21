@@ -24,13 +24,10 @@ import java.util.Map;
  * Checking adres email
  * Parsing data to JSON and sending to the server
  */
-
 public class Login extends AppCompatActivity implements View.OnClickListener {
-
     EditText emailInput;
     EditText passwordInput;
     Button sigin;
-
     private static final String URL_FOR_LOGIN = VolleyInstance.getBaseUrl() + "/common/login/";
 
     @Override
@@ -44,6 +41,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
+        
     }
 }
