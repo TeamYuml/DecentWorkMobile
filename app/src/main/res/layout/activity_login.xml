@@ -31,4 +31,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Button" />
+
+    <Button
+        android:id="@+id/btn_link_signup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:background="@color/registration_button_background"
+        android:text="@string/btn_link_signup"
+        android:textColor="@android:color/black" />
+
+    <com.google.android.gms.common.SignInButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_googleAuth" />
 </LinearLayout>

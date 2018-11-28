@@ -1,5 +1,6 @@
 package com.example.teamyuml.decentworkmobile.views;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
@@ -14,6 +15,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.utils.CreateJson;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,7 +34,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private EditText emailInput;
     private EditText passwordInput;
-
+    private Button btnGoogleAuth;
+    private static final int Req_Code = 9001;
     private static final String LOGIN_URL = VolleyInstance.getBaseUrl() + "/common/login/";
 
     @Override
@@ -42,6 +47,16 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         passwordInput = findViewById(R.id.password_input);
         signIn = findViewById(R.id.sign_in);
         signIn.setOnClickListener(this);
+        btnGoogleAuth = findViewById(R.id.btn_googleAuth);
+        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        final GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, (GoogleApiClient.OnConnectionFailedListener) this).addApi(Auth.GOOGLE_SIGN_IN_API,signInOptions).build();
+        btnGoogleAuth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
