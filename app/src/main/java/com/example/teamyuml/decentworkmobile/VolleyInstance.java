@@ -15,6 +15,11 @@ public class VolleyInstance {
     private static VolleyInstance mAppSingletonInstance;
     private static Context mContext;
 
+    private static final String BASE_URL = "http://localhost:8000";
+
+    public static String getBaseUrl() {
+        return BASE_URL;
+    }
 
     public static synchronized VolleyInstance getInstance(Context context) {
         if (mAppSingletonInstance == null) {
