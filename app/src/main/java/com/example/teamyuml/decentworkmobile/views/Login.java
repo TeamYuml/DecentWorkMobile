@@ -17,6 +17,7 @@ import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.utils.CreateJson;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.JSONException;
@@ -34,7 +35,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private EditText emailInput;
     private EditText passwordInput;
-    private Button btnGoogleAuth;
+    SignInButton btnGoogleAuth;
     private static final int Req_Code = 9001;
     private static final String LOGIN_URL = VolleyInstance.getBaseUrl() + "/common/login/";
 
