@@ -88,25 +88,25 @@ public class NoticeList extends AppCompatActivity {
     }
 
     private void initNoticeList() {
-        noticeList.setAdapter(new ArrayAdapter<HashMap<String, String>>(
-                getApplicationContext(),
-                android.R.layout.simple_list_item_1, noticeAll
-        ));
+        CustomListView adapter = new CustomListView(this, noticeAll);
+
+        noticeList.setAdapter(adapter);
     }
 
-    private void initLanguagesListView() {
+   /* private void initLanguagesListView() {
 
         noticeList.setAdapter(new ArrayAdapter<HashMap<String, String>>(
                 getApplicationContext(),
                 android.R.layout.simple_list_item_1,
                 noticeAll));
 
-        /*noticeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        noticeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
                 Toast.makeText(getApplicationContext(),
                         noticeAll[pos],
                         Toast.LENGTH_SHORT).show();
             }
         });*/
-    }
+
+
 }
