@@ -41,9 +41,9 @@
         android:text="@string/btn_link_signup"
         android:textColor="@android:color/black" />
 
-    <com.google.android.gms.common.SignInButton
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.example.teamyuml.decentworkmobile.fragments.SignInGoogle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_googleAuth"
-        android:text="Sign up with google"/>
+        android:layout_height="36dp" />
 </LinearLayout>
