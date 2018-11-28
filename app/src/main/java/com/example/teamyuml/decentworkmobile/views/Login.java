@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.view.View;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -15,11 +14,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.utils.CreateJson;
-import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,6 +35,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private EditText emailInput;
     private EditText passwordInput;
     SignInButton btnGoogleAuth;
+
     private static final int Req_Code = 9001;
     private static final String LOGIN_URL = VolleyInstance.getBaseUrl() + "/common/login/";
 
@@ -49,16 +49,39 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         signIn = findViewById(R.id.sign_in);
         signIn.setOnClickListener(this);
         btnGoogleAuth = findViewById(R.id.btn_googleAuth);
-        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        final GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, (GoogleApiClient.OnConnectionFailedListener) this).addApi(Auth.GOOGLE_SIGN_IN_API,signInOptions).build();
         btnGoogleAuth.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent i = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-                startActivity(i);
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.btn_googleAuth:
+                        signInGoogle();
+                        break;
+                }
             }
         });
     }
+
+    private void signInGoogle() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivity(signInIntent);
+    }
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        updateUI(account);
+    }
+
+    private void updateUI(GoogleSignInAccount account) {
+        Toast.makeText(getApplicationContext(), "logged", Toast.LENGTH_SHORT).show();
+    }
+
 
     @Override
     /**
