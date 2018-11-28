@@ -33,6 +33,7 @@ public class NoticeList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getNotice();
+        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_list);
 
@@ -82,7 +83,7 @@ public class NoticeList extends AppCompatActivity {
                         Toast.makeText(NoticeList.this, error.networkResponse.statusCode, Toast.LENGTH_LONG).show();
                     }
                 });
-        
+
         VolleyInstance.getInstance(this).addToRequestQueue(jsonArrayRequest, "noticeList");
     }
 

@@ -15,7 +15,7 @@ public class VolleyInstance {
     private static VolleyInstance mAppSingletonInstance;
     private static Context mContext;
 
-    private static final String BASE_URL = "http://192.168.43.249:8000";
+    private static final String BASE_URL = "http://localhost:8000";
 
     public static String getBaseUrl() {
         return BASE_URL;
