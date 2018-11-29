@@ -9,13 +9,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.teamyuml.decentworkmobile.BuildConfig;
 import com.example.teamyuml.decentworkmobile.R;
+import com.example.teamyuml.decentworkmobile.VolleyInstance;
+import com.example.teamyuml.decentworkmobile.utils.CreateJson;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**
@@ -24,10 +34,11 @@ import com.google.android.gms.tasks.Task;
  */
 public class SignInGoogle extends Fragment implements View.OnClickListener {
 
+    String GoogleTokenURL = VolleyInstance.getBaseUrl() + "/common/tokensignin/";
     View v;
-    private static final int RC_SIGN_IN = 9001;
-
     GoogleSignInClient mGoogleSignInClient;
+
+    private static final int RC_SIGN_IN = 9001;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +56,7 @@ public class SignInGoogle extends Fragment implements View.OnClickListener {
         v.findViewById(R.id.btn_googleAuth).setOnClickListener(this);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(BuildConfig.GoogleClientID)
             .requestEmail()
             .build();
         mGoogleSignInClient = GoogleSignIn.getClient(getContext(), gso);
@@ -87,11 +99,33 @@ public class SignInGoogle extends Fragment implements View.OnClickListener {
     /**
      * Make intent to next activity after successful sign in or
      * make sign in button visible if sign in failure.
-     * @param completedTask
+     * @param completedTask - Completed google sign api call
      */
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            String idToken = account.getIdToken();
+
+            CreateJson cj = new CreateJson();
+            cj.addStr("idToken", idToken);
+            JSONObject data = cj.makeJSON();
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, GoogleTokenURL, data, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        System.out.println(response);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println(error.networkResponse.statusCode);
+                    }
+                });
+
+            VolleyInstance.getInstance(getContext()).addToRequestQueue(jsonObjectRequest, "login");
 
             updateUI(account);
             // TODO ADD INTENT
@@ -100,6 +134,8 @@ public class SignInGoogle extends Fragment implements View.OnClickListener {
         } catch (ApiException e) {
             System.out.println(e.getStatusCode());
             updateUI(null);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }
