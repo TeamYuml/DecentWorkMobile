@@ -2,6 +2,7 @@ package com.example.teamyuml.decentworkmobile.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,9 +35,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private EditText emailInput;
     private EditText passwordInput;
-    SignInButton btnGoogleAuth;
 
-    private static final int Req_Code = 9001;
     private static final String LOGIN_URL = VolleyInstance.getBaseUrl() + "/common/login/";
 
     @Override
@@ -48,40 +47,20 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         passwordInput = findViewById(R.id.password_input);
         signIn = findViewById(R.id.sign_in);
         signIn.setOnClickListener(this);
-        btnGoogleAuth = findViewById(R.id.btn_googleAuth);
-        btnGoogleAuth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.btn_googleAuth:
-                        signInGoogle();
-                        break;
-                }
-            }
-        });
-    }
-
-    private void signInGoogle() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivity(signInIntent);
     }
 
     @Override
+    /**
+     * Check if there is account which was signed in already.
+     */
     protected void onStart() {
-
         super.onStart();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        updateUI(account);
-    }
 
-    private void updateUI(GoogleSignInAccount account) {
-        Toast.makeText(getApplicationContext(), "logged", Toast.LENGTH_SHORT).show();
+        if (account != null) {
+            // TODO Intent to next activity
+        }
     }
-
 
     @Override
     /**
