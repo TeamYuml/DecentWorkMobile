@@ -13,7 +13,9 @@ import com.example.teamyuml.decentworkmobile.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+/**
+ * Create own custom ListView style
+ */
 public class CustomListView extends ArrayAdapter<HashMap<String, String>> {
     private Activity NoticeList;
     ArrayList<HashMap<String, String>> noticeAll;
@@ -31,6 +33,9 @@ public class CustomListView extends ArrayAdapter<HashMap<String, String>> {
     }
 
     @Override
+    /**
+     *  Set viewHolder field and set data to them
+     */
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         LayoutInflater layoutInflater = NoticeList.getLayoutInflater();

@@ -1,5 +1,6 @@
 package com.example.teamyuml.decentworkmobile.views;
 
+import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,9 +28,11 @@ import java.util.HashMap;
 
 public class NoticeList extends AppCompatActivity {
 
-    private ListView noticeList;
     ArrayList<HashMap<String, String>> noticeAll;
+    private ListView noticeList;
     private static final String NOTICE_URL = VolleyInstance.getBaseUrl() + "/engagments/";
+    Integer pos;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +43,6 @@ public class NoticeList extends AppCompatActivity {
 
         noticeList = findViewById(R.id.noticeList);
         noticeAll = new ArrayList<>();
-
     }
 
     private void getNotice() {
@@ -48,13 +51,13 @@ public class NoticeList extends AppCompatActivity {
                 (Request.Method.GET, NOTICE_URL, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        String title = null;
                         String profession = null;
+                        String title = null;
                         Integer id = null;
 
                         try {
 
-                            for (int i = 0; i< response.length(); i++) {
+                            for (int i = 0; i < response.length(); i++) {
 
                                 JSONObject notice = response.getJSONObject(i);
                                 id = notice.getInt("id");
@@ -72,41 +75,40 @@ public class NoticeList extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        if (noticeList != null) {
+
+                        if (noticeAll != null) {
                             initNoticeList();
+                            Toast.makeText(NoticeList.this,
+                                    "Pobrano " + noticeAll.size() + " ogłoszenia"
+                                    ,Toast.LENGTH_LONG).show();
                         }
 
                     }
+
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(NoticeList.this, error.networkResponse.statusCode, Toast.LENGTH_LONG).show();
+                        Toast.makeText(NoticeList.this,
+                                "Coś poszło nie tak",
+                                Toast.LENGTH_LONG).show();
                     }
                 });
 
         VolleyInstance.getInstance(this).addToRequestQueue(jsonArrayRequest, "noticeList");
     }
 
+    /**
+     * Set adapter to litView and add clickListener event to get clicked data
+     */
     private void initNoticeList() {
         CustomListView adapter = new CustomListView(this, noticeAll);
-
         noticeList.setAdapter(adapter);
-    }
-
-   /* private void initLanguagesListView() {
-
-        noticeList.setAdapter(new ArrayAdapter<HashMap<String, String>>(
-                getApplicationContext(),
-                android.R.layout.simple_list_item_1,
-                noticeAll));
 
         noticeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
-                Toast.makeText(getApplicationContext(),
-                        noticeAll[pos],
-                        Toast.LENGTH_SHORT).show();
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                noticeAll.get(position);
             }
-        });*/
+        });
 
-
+    }
 }
