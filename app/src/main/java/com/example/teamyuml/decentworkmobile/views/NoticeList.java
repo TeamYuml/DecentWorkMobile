@@ -45,7 +45,7 @@ public class NoticeList extends AppCompatActivity {
     }
 
     private void getNotice() {
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest (
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET, NOTICE_URL, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {

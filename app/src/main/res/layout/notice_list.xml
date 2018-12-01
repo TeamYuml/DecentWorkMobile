@@ -9,17 +9,17 @@
         android:id="@+id/id"
         android:layout_width="fill_parent"
         android:gravity="center"
-        android:layout_height="wrap_content"></TextView>
+        android:layout_height="wrap_content"/>
     <TextView
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/title"
         android:layout_width="fill_parent"
         android:gravity="center"
-        android:layout_height="wrap_content"></TextView>
+        android:layout_height="wrap_content"/>
     <TextView
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/profession"
         android:layout_width="fill_parent"
         android:gravity="center"
-        android:layout_height="wrap_content"></TextView>
+        android:layout_height="wrap_content" />
 </LinearLayout>
