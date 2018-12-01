@@ -31,7 +31,6 @@ public class NoticeList extends AppCompatActivity {
     ArrayList<HashMap<String, String>> noticeAll;
     private ListView noticeList;
     private static final String NOTICE_URL = VolleyInstance.getBaseUrl() + "/engagments/";
-    Integer pos;
     private TextView textView;
 
     @Override
@@ -46,9 +45,7 @@ public class NoticeList extends AppCompatActivity {
     }
 
     private void getNotice() {
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
-
-                (Request.Method.GET, NOTICE_URL, null, new Response.Listener<JSONArray>() {
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest (Request.Method.GET, NOTICE_URL, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         String profession = null;
@@ -56,9 +53,7 @@ public class NoticeList extends AppCompatActivity {
                         Integer id = null;
 
                         try {
-
                             for (int i = 0; i < response.length(); i++) {
-
                                 JSONObject notice = response.getJSONObject(i);
                                 id = notice.getInt("id");
                                 title = notice.getString("title");

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Create own custom ListView style
+ * Create own custom  ArrayAdapter ListView
  */
 public class CustomListView extends ArrayAdapter<HashMap<String, String>> {
     private Activity NoticeList;
