@@ -74,8 +74,8 @@ public class NoticeList extends AppCompatActivity {
                         if (noticeAll != null) {
                             initNoticeList();
                             Toast.makeText(NoticeList.this,
-                                    "Pobrano " + noticeAll.size() + " ogłoszenia"
-                                    , Toast.LENGTH_LONG).show();
+                                    "Pobrano " + noticeAll.size() + " ogłoszenia",
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
 
