@@ -17,6 +17,7 @@ import com.example.teamyuml.decentworkmobile.BuildConfig;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.utils.CreateJson;
+import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -103,7 +104,7 @@ public class SignInGoogle extends Fragment implements View.OnClickListener {
      */
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            final GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             String idToken = account.getIdToken();
 
             CreateJson cj = new CreateJson();
@@ -116,21 +117,30 @@ public class SignInGoogle extends Fragment implements View.OnClickListener {
                     @Override
                     public void onResponse(JSONObject response) {
                         System.out.println(response);
+                        try {
+                            String email = response.getString("email");
+                            String token = response.getString("token");
+
+                            UserAuth.saveAuthData(getActivity(), email, token);
+
+                            updateUI(account);
+                            // TODO ADD INTENT
+                            Toast.makeText(getContext(), "logged", Toast.LENGTH_LONG).show();
+                            getActivity().finish();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        System.out.println(error.networkResponse.statusCode);
+                        System.out.println(error.networkResponse);
                     }
                 });
 
             VolleyInstance.getInstance(getContext()).addToRequestQueue(jsonObjectRequest, "login");
-
-            updateUI(account);
-            // TODO ADD INTENT
-            //getActivity().finish();
-            Toast.makeText(getContext(), "logged", Toast.LENGTH_LONG).show();
         } catch (ApiException e) {
             System.out.println(e.getStatusCode());
             updateUI(null);
