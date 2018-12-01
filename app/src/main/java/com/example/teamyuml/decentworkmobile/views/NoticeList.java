@@ -92,7 +92,7 @@ public class NoticeList extends AppCompatActivity {
     }
 
     /**
-     * Set adapter to litView and add clickListener event to get clicked data
+     * Set adapter to ListView and add clickListener event to get clicked data
      */
     private void initNoticeList() {
         CustomListView adapter = new CustomListView(this, noticeAll);
@@ -103,6 +103,5 @@ public class NoticeList extends AppCompatActivity {
                 noticeAll.get(position);
             }
         });
-
     }
 }

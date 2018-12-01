@@ -34,7 +34,7 @@ public class CustomListView extends ArrayAdapter<HashMap<String, String>> {
 
     @Override
     /**
-     *  Set viewHolder field and set data to them
+     *  Initializes fields of viewHolder and adds it to view
      */
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
