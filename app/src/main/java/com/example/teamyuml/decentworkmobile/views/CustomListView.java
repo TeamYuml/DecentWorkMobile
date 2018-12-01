@@ -42,9 +42,9 @@ public class CustomListView extends ArrayAdapter<HashMap<String, String>> {
         convertView = layoutInflater.inflate(R.layout.notice_list, null, true);
 
         viewHolder = new ViewHolder();
-        viewHolder.id =  convertView.findViewById(R.id.id);
+        viewHolder.id = convertView.findViewById(R.id.id);
         viewHolder.title = convertView.findViewById(R.id.title);
-        viewHolder.profession =  convertView.findViewById(R.id.profession);
+        viewHolder.profession = convertView.findViewById(R.id.profession);
         convertView.setTag(viewHolder);
 
         viewHolder.id.setText(noticeAll.get(position).get("id").toString());

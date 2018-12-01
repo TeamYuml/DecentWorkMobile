@@ -45,7 +45,8 @@ public class NoticeList extends AppCompatActivity {
     }
 
     private void getNotice() {
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest (Request.Method.GET, NOTICE_URL, null, new Response.Listener<JSONArray>() {
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest (
+                Request.Method.GET, NOTICE_URL, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         String profession = null;
@@ -66,7 +67,6 @@ public class NoticeList extends AppCompatActivity {
 
                                 noticeAll.add(oneNotice);
                             }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -75,9 +75,8 @@ public class NoticeList extends AppCompatActivity {
                             initNoticeList();
                             Toast.makeText(NoticeList.this,
                                     "Pobrano " + noticeAll.size() + " ogłoszenia"
-                                    ,Toast.LENGTH_LONG).show();
+                                    , Toast.LENGTH_LONG).show();
                         }
-
                     }
 
                 }, new Response.ErrorListener() {
