@@ -11,9 +11,15 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            buildConfigField 'String', "GoogleClientID", DecentWork_GoogleClientID
+            resValue 'string', "google_client_id", DecentWork_GoogleClientID
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', "GoogleClientID", DecentWork_GoogleClientID
+            resValue 'string', "google_client_id", DecentWork_GoogleClientID
         }
     }
 }

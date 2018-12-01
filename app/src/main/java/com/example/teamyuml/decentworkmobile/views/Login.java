@@ -2,7 +2,6 @@ package com.example.teamyuml.decentworkmobile.views;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,11 +14,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.utils.CreateJson;
+import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -57,7 +54,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         super.onStart();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
-        if (account != null) {
+        if (account != null || UserAuth.getToken(this) != null) {
+            Toast.makeText(Login.this, "Logged already", Toast.LENGTH_LONG).show();
             // TODO Intent to next activity
         }
     }
@@ -75,18 +73,18 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                 @Override
                 public void onResponse(JSONObject response) {
-                    String email = null;
-
                     try {
-                        email = response.getString("email");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                        String email = response.getString("email");
+                        String token = response.getString("token");
 
-                    if (email != null) {
-                        // TODO: ADD INTENT TO NEXT ACTIVITY
+                        UserAuth.saveAuthData(Login.this, email, token);
+
                         Toast.makeText(Login.this, email,
                             Toast.LENGTH_LONG).show();
+
+                        // TODO: ADD INTENT TO NEXT ACTIVITY
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
             }, new Response.ErrorListener() {
