@@ -14,11 +14,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.utils.CreateJson;
+import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,9 +32,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private EditText emailInput;
     private EditText passwordInput;
-    SignInButton btnGoogleAuth;
 
-    private static final int Req_Code = 9001;
     private static final String LOGIN_URL = VolleyInstance.getBaseUrl() + "/common/login/";
 
     @Override
@@ -48,40 +44,21 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         passwordInput = findViewById(R.id.password_input);
         signIn = findViewById(R.id.sign_in);
         signIn.setOnClickListener(this);
-        btnGoogleAuth = findViewById(R.id.btn_googleAuth);
-        btnGoogleAuth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.btn_googleAuth:
-                        signInGoogle();
-                        break;
-                }
-            }
-        });
-    }
-
-    private void signInGoogle() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivity(signInIntent);
     }
 
     @Override
+    /**
+     * Check if there is account which was signed in already.
+     */
     protected void onStart() {
-
         super.onStart();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        updateUI(account);
-    }
 
-    private void updateUI(GoogleSignInAccount account) {
-        Toast.makeText(getApplicationContext(), "logged", Toast.LENGTH_SHORT).show();
+        if (account != null || UserAuth.getToken(this) != null) {
+            Toast.makeText(Login.this, "Logged already", Toast.LENGTH_LONG).show();
+            // TODO Intent to next activity
+        }
     }
-
 
     @Override
     /**
@@ -96,18 +73,18 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                 @Override
                 public void onResponse(JSONObject response) {
-                    String email = null;
-
                     try {
-                        email = response.getString("email");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                        String email = response.getString("email");
+                        String token = response.getString("token");
 
-                    if (email != null) {
-                        // TODO: ADD INTENT TO NEXT ACTIVITY
+                        UserAuth.saveAuthData(Login.this, email, token);
+
                         Toast.makeText(Login.this, email,
                             Toast.LENGTH_LONG).show();
+
+                        // TODO: ADD INTENT TO NEXT ACTIVITY
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
             }, new Response.ErrorListener() {
