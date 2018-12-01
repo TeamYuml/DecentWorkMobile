@@ -45,17 +45,19 @@ public class NoticeList extends AppCompatActivity {
     }
 
     private void getNotice() {
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET, NOTICE_URL, null, new Response.Listener<JSONArray>() {
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, NOTICE_URL, null, new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONArray response) {
+                    public void onResponse(JSONObject response) {
                         String profession = null;
                         String title = null;
                         Integer id = null;
 
                         try {
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject notice = response.getJSONObject(i);
+                            JSONArray results = response.getJSONArray("results");
+                            
+                            for (int i = 0; i < results.length(); i++) {
+                                JSONObject notice = results.getJSONObject(i);
                                 id = notice.getInt("id");
                                 title = notice.getString("title");
                                 profession = notice.getString("profession");
@@ -88,7 +90,7 @@ public class NoticeList extends AppCompatActivity {
                     }
                 });
 
-        VolleyInstance.getInstance(this).addToRequestQueue(jsonArrayRequest, "noticeList");
+        VolleyInstance.getInstance(this).addToRequestQueue(jsonObjectRequest, "noticeList");
     }
 
     /**
