@@ -4,6 +4,7 @@ import android.app.DownloadManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -22,68 +23,69 @@ import java.util.List;
 
 public class NoticeDetails extends AppCompatActivity {
 
-    static String IdDetails;
-    TextView textView;
-    ArrayList noticeDetail = new ArrayList<>();
+    String IdDetails;
+    TextView title;
+    TextView profession;
+    TextView owner;
+    TextView city;
+    TextView description;
+    TextView created;
+    List<String> noticeDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_details);
         IdDetails = getIntent().getStringExtra("choosenNotice");
-        textView = findViewById(R.id.textView);
+        title = findViewById(R.id.title);
+        profession = findViewById(R.id.profession);
+        owner = findViewById(R.id.owner);
+        city = findViewById(R.id.city);
+        description = findViewById(R.id.description);
+        created = findViewById(R.id.created);
         getNoticeDetails();
     }
 
     private void getNoticeDetails() {
         final String NOTICE_DETAIL_URL = VolleyInstance.getBaseUrl() + "/engagments/" + IdDetails + "/";
-        System.out.print(NOTICE_DETAIL_URL);
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest (Request.Method.GET, NOTICE_DETAIL_URL, null, new Response.Listener<JSONArray>() {
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest (
+                Request.Method.GET, NOTICE_DETAIL_URL, null, new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        String title = null;
-                        String profession = null;
-                        Integer owner = null;
-                        String city = null;
-                        String description = null;
-                        String created = null;
+                    public void onResponse(JSONObject response) {
                         try {
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject details = response.getJSONObject(i);
-                                title = details.getString("title");
-                                profession = details.getString("profession");
-                                owner = details.getInt("owner");
-                                city = details.getString("city");
-                                description = details.getString("description");
-                                created = details.getString("created");
-
-                                ArrayList detailsData = new ArrayList();
-
-                                detailsData.add(title);
-                                detailsData.add(profession);
-                                detailsData.add(owner);
-                                detailsData.add(city);
-                                detailsData.add(description);
-                                detailsData.add(created);
-
-                                noticeDetail.add(detailsData);
-                            }
+                            String title = response.getString("title");
+                            String profession = response.getString("profession");
+                            String owner = response.getString("owner");
+                            String city = response.getString("city");
+                            String description = response.getString("description");
+                            String created = response.getString("created");
+                            noticeDetails = new ArrayList<String>();
+                            noticeDetails.add(title);
+                            noticeDetails.add(profession);
+                            noticeDetails.add(owner);
+                            noticeDetails.add(city);
+                            noticeDetails.add(description);
+                            noticeDetails.add(created);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        if(noticeDetail == null) {
-                            System.out.print("Lista jest pusta");
-                        } else {
-                            System.out.println(noticeDetail);
+                        if(noticeDetails != null) {
+                            title.setText(noticeDetails.get(0));
+                            profession.setText(noticeDetails.get(1));
+                            owner.setText(noticeDetails.get(2));
+                            city.setText(noticeDetails.get(3));
+                            description.setText(noticeDetails.get(4));
+                            created.setText(noticeDetails.get(5));
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println(error);
+                Toast.makeText(NoticeDetails.this,
+                        "Coś poszło nie tak",
+                        Toast.LENGTH_LONG).show();
                 }
             });
-        VolleyInstance.getInstance(this).addToRequestQueue(jsonArrayRequest, "noticeDetails");
+        VolleyInstance.getInstance(this).addToRequestQueue(jsonObjectRequest, "noticeDetails");
     }
-
 }
