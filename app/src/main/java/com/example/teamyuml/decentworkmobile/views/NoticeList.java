@@ -1,6 +1,8 @@
 package com.example.teamyuml.decentworkmobile.views;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,7 +33,6 @@ public class NoticeList extends AppCompatActivity {
     ArrayList<HashMap<String, String>> noticeAll;
     private ListView noticeList;
     private static final String NOTICE_URL = VolleyInstance.getBaseUrl() + "/engagments/";
-    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,8 +103,15 @@ public class NoticeList extends AppCompatActivity {
 
         noticeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                noticeAll.get(position);
+                String clickedItem = noticeAll.get(position).get("id").toString();
+                toNoticeDetails(clickedItem);
             }
         });
+    }
+
+    private void toNoticeDetails(String clickedItem) {
+        Intent toNoticeDatail = new Intent(this, NoticeDetails.class);
+        toNoticeDatail.putExtra("choosenNotice", (String) clickedItem);
+        startActivity(toNoticeDatail);
     }
 }
