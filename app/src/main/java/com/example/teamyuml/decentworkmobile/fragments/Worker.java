@@ -13,10 +13,12 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.views.CustomListView;
+import com.example.teamyuml.decentworkmobile.views.CustomWorkerView;
 import com.example.teamyuml.decentworkmobile.views.NoticeDetails;
 
 import org.json.JSONArray;
@@ -25,6 +27,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Worker extends Fragment {
     ArrayList<HashMap<String, String>> workerAll;
@@ -33,45 +36,39 @@ public class Worker extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        getWorkers();
         super.onCreate(savedInstanceState);
         workerAll = new ArrayList<>();
-        System.out.println("DIALA");
+        getWorkers();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        View v = inflater.inflate(R.layout.notice_list_view, container, false);
-        workerList = v.findViewById(R.id.noticeList);
+        View v = inflater.inflate(R.layout.activity_worker, container, false);
+        workerList = v.findViewById(R.id.workerList);
         return v;
     }
 
     private void getWorkers() {
-        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET, NOTICE_URL, null, new Response.Listener<JSONObject>() {
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+            Request.Method.GET, NOTICE_URL, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONObject response) {
-                String name = null;
-                String lastName = null;
-                String profession = null;
-                String city = null;
-                Integer id = null;
-
+            public void onResponse(JSONArray response) {
                 try {
-                    JSONArray results = response.getJSONArray("results");
+                    for (int i = 0; i < response.length(); i++) {
+                        //TODO: Add ID later and try to find better way for this.
+                        JSONObject profile = response.getJSONObject(i);
+                        JSONObject user = profile.getJSONObject("user");
+                        String name = user.getString("first_name");
+                        String last_name = user.getString("last_name");
+                        JSONArray professionsJson = (JSONArray) profile.get("professions");
+                        List<String> professions = new ArrayList<>();
+                        for (int j = 0; j < professionsJson.length(); j++) {
+                            professions.add(professionsJson.getString(j));
+                        }
 
-                    for (int i = 0; i < results.length(); i++) {
-                        JSONObject notice = results.getJSONObject(i);
-                        id = notice.getInt("id");
-                        name = notice.getString("name");
-                        lastName = notice.getString("lastName");
-                        profession = notice.getString("profession");
-                        city = notice.getString("city");
                         HashMap<String, String> oneNotice = new HashMap<>();
-                        oneNotice.put("id", String.valueOf(id));
                         oneNotice.put("name", name);
-                        oneNotice.put("lastName", lastName);
-                        oneNotice.put("profession", profession);
-                        oneNotice.put("city", city);
+                        oneNotice.put("lastName", last_name);
+                        oneNotice.put("city", profile.getString("city"));
 
                         workerAll.add(oneNotice);
                     }
@@ -96,14 +93,14 @@ public class Worker extends Fragment {
             }
         });
 
-        VolleyInstance.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, "noticeList");
+        VolleyInstance.getInstance(getActivity()).addToRequestQueue(jsonArrayRequest, "noticeList");
     }
 
     /**
      * Set adapter to ListView and add clickListener event to get clicked data
      */
     private void initNoticeList() {
-        CustomListView adapter = new CustomListView(getActivity(), workerAll);
+        CustomWorkerView adapter = new CustomWorkerView(getActivity(), workerAll);
         workerList.setAdapter(adapter);
     }
 }
