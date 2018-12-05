@@ -111,7 +111,6 @@ public class NoticeList extends AppCompatActivity {
                 Intent toNoticeDatail = new Intent(NoticeList.this, NoticeDetails.class);
                 toNoticeDatail.putExtra("choosenNotice", (String) clickedItem);
                 startActivity(toNoticeDatail);
-
             }
         });
     }
