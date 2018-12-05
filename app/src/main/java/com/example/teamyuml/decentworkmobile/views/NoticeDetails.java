@@ -48,34 +48,26 @@ public class NoticeDetails extends AppCompatActivity {
 
     private void getNoticeDetails() {
         final String NOTICE_DETAIL_URL = VolleyInstance.getBaseUrl() + "/engagments/" + IdDetails + "/";
+
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest (
                 Request.Method.GET, NOTICE_DETAIL_URL, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            String title = response.getString("title");
-                            String profession = response.getString("profession");
-                            String owner = response.getString("owner");
-                            String city = response.getString("city");
-                            String description = response.getString("description");
-                            String created = response.getString("created");
-                            noticeDetails = new ArrayList<String>();
-                            noticeDetails.add(title);
-                            noticeDetails.add(profession);
-                            noticeDetails.add(owner);
-                            noticeDetails.add(city);
-                            noticeDetails.add(description);
-                            noticeDetails.add(created);
+                            String title_s = response.getString("title");
+                            String profession_s = response.getString("profession");
+                            String owner_s = response.getString("owner");
+                            String city_s = response.getString("city");
+                            String description_s = response.getString("description");
+                            String created_s = response.getString("created");
+                            title.setText(title_s);
+                            profession.setText(profession_s);
+                            owner.setText(owner_s);
+                            city.setText(city_s);
+                            description.setText(description_s);
+                            created.setText(created_s);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }
-                        if(noticeDetails != null) {
-                            title.setText(noticeDetails.get(0));
-                            profession.setText(noticeDetails.get(1));
-                            owner.setText(noticeDetails.get(2));
-                            city.setText(noticeDetails.get(3));
-                            description.setText(noticeDetails.get(4));
-                            created.setText(noticeDetails.get(5));
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -86,6 +78,7 @@ public class NoticeDetails extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
                 }
             });
+
         VolleyInstance.getInstance(this).addToRequestQueue(jsonObjectRequest, "noticeDetails");
     }
 }

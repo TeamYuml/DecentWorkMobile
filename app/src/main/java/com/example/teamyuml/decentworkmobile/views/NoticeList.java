@@ -108,15 +108,12 @@ public class NoticeList extends AppCompatActivity {
         noticeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 String clickedItem = noticeAll.get(position).get("id").toString();
-                toNoticeDetails(clickedItem);
+                Intent toNoticeDatail = new Intent(NoticeList.this, NoticeDetails.class);
+                toNoticeDatail.putExtra("choosenNotice", (String) clickedItem);
+                startActivity(toNoticeDatail);
+
             }
         });
-    }
-
-    private void toNoticeDetails(String clickedItem) {
-        Intent toNoticeDatail = new Intent(this, NoticeDetails.class);
-        toNoticeDatail.putExtra("choosenNotice", (String) clickedItem);
-        startActivity(toNoticeDatail);
     }
 
     private void panelSpinnerAdapter() {
@@ -128,9 +125,9 @@ public class NoticeList extends AppCompatActivity {
         panelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(parent.getItemIdAtPosition(position));
-                if((parent.getItemIdAtPosition(position) == 1)) {
-                    toWorker();
+                if (parent.getItemIdAtPosition(position) == 1) {
+                    Intent toWorker = new Intent(NoticeList.this ,Worker.class);
+                    startActivity(toWorker);
                 }
             }
 
@@ -139,10 +136,5 @@ public class NoticeList extends AppCompatActivity {
                 Toast.makeText(NoticeList.this, "Nic nie wybrałes", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void toWorker() {
-        Intent toWorker = new Intent(this ,Worker.class);
-        startActivity(toWorker);
     }
 }
