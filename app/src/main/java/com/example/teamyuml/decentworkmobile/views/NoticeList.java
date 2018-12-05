@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -32,17 +34,19 @@ public class NoticeList extends AppCompatActivity {
 
     ArrayList<HashMap<String, String>> noticeAll;
     private ListView noticeList;
+    Spinner panelSpinner;
     private static final String NOTICE_URL = VolleyInstance.getBaseUrl() + "/engagments/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getNotice();
-        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_list);
-
+        panelSpinner = findViewById(R.id.panel_spinner);
+        panelSpinnerAdapter();
         noticeList = findViewById(R.id.noticeList);
         noticeAll = new ArrayList<>();
+
     }
 
     private void getNotice() {
@@ -113,5 +117,32 @@ public class NoticeList extends AppCompatActivity {
         Intent toNoticeDatail = new Intent(this, NoticeDetails.class);
         toNoticeDatail.putExtra("choosenNotice", (String) clickedItem);
         startActivity(toNoticeDatail);
+    }
+
+    private void panelSpinnerAdapter() {
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
+                this, R.array.notice_list, android.R.layout.simple_spinner_dropdown_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        panelSpinner.setAdapter(spinnerAdapter);
+
+        panelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println(parent.getItemIdAtPosition(position));
+                if((parent.getItemIdAtPosition(position) == 1)) {
+                    toWorker();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Toast.makeText(NoticeList.this, "Nic nie wybrałes", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void toWorker() {
+        Intent toWorker = new Intent(this ,Worker.class);
+        startActivity(toWorker);
     }
 }

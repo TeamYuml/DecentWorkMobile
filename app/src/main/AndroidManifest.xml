@@ -24,7 +24,10 @@
         <activity
             android:name=".views.Login"
             android:parentActivityName=".views.NoticeList" />
-        <activity android:name=".views.NoticeDetails"
+        <activity
+            android:name=".views.NoticeDetails"
+            android:parentActivityName=".views.NoticeList" />
+        <activity android:name=".views.Worker"
             android:parentActivityName=".views.NoticeList" />
     </application>
 
