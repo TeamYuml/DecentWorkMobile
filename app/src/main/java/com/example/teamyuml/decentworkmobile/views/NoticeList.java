@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,6 +37,7 @@ public class NoticeList extends AppCompatActivity {
     private ListView noticeList;
     Spinner panelSpinner;
     private static final String NOTICE_URL = VolleyInstance.getBaseUrl() + "/engagments/";
+    ImageButton user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class NoticeList extends AppCompatActivity {
         panelSpinnerAdapter();
         noticeList = findViewById(R.id.noticeList);
         noticeAll = new ArrayList<>();
+        user = findViewById(R.id.user_panel);
 
     }
 
@@ -136,5 +139,10 @@ public class NoticeList extends AppCompatActivity {
                 Toast.makeText(NoticeList.this, "Nic nie wybrałes", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void userPanel(View view) {
+        Intent toUserPanel = new Intent(NoticeList.this, UserPanel.class);
+        startActivity(toUserPanel);
     }
 }
