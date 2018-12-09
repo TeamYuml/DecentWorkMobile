@@ -21,6 +21,7 @@ import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.views.CustomListView;
 import com.example.teamyuml.decentworkmobile.views.CustomWorkerView;
 import com.example.teamyuml.decentworkmobile.views.NoticeDetails;
+import com.example.teamyuml.decentworkmobile.views.WorkerDetails;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,13 +59,11 @@ public class ListViewFragment extends Fragment {
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             Toast.makeText(
                 getActivity() ,"Brak dostępu do metody.", Toast.LENGTH_LONG).show();
-            System.out.println(e.getMessage());
             e.printStackTrace();
         }
 
         View v = inflater.inflate(listLayoutId, container, false);
         listView = v.findViewById(listViewId);
-        System.out.println(listView);
         return v;
     }
 
@@ -95,9 +94,17 @@ public class ListViewFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 String clickedItem = data.get(position).get("id").toString();
-                Intent toNoticeDetail = new Intent(getActivity(), NoticeDetails.class);
-                toNoticeDetail.putExtra("choosenNotice", (String) clickedItem);
-                startActivity(toNoticeDetail);
+                System.out.println(listLayoutId);
+
+                if(listLayoutId == 2131361828) {
+                    Intent toNoticeDetail = new Intent(getActivity(), NoticeDetails.class);
+                    toNoticeDetail.putExtra("choosenNotice", (String) clickedItem);
+                    startActivity(toNoticeDetail);
+                }else {
+                    Intent toWorkerDetail = new Intent(getActivity(), WorkerDetails.class);
+                    toWorkerDetail.putExtra("choosenWorker", (String) clickedItem);
+                    startActivity(toWorkerDetail);
+                }
             }
         });
     }
@@ -172,12 +179,13 @@ public class ListViewFragment extends Fragment {
 
                         /**
                          * This is needed but in adapter this field is not added for now:
-                         * oneNotice.put("id", id);
-                         */
 
+                         */
+                        oneNotice.put("id", id);
                         oneNotice.put("name", name);
                         oneNotice.put("lastName", last_name);
                         oneNotice.put("city", profile.getString("city"));
+                        oneNotice.put("profession", profile.getString("professions"));
 
                         data.add(oneNotice);
                     }

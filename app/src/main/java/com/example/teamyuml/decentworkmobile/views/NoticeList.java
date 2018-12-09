@@ -25,8 +25,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.fragments.ListViewFragment;
-import com.example.teamyuml.decentworkmobile.fragments.Notice;
-import com.example.teamyuml.decentworkmobile.fragments.Worker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
