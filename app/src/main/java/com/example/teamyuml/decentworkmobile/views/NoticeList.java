@@ -71,7 +71,8 @@ public class NoticeList extends AppCompatActivity {
                         NOTICE_URL,
                         R.id.noticeList,
                         R.layout.notice_list_view,
-                        "getNotice"
+                        "getNotice",
+                            "noticesList"
                     ));
 
                     fragmentTransaction.replace(R.id.fragment_content, notice);
@@ -82,7 +83,8 @@ public class NoticeList extends AppCompatActivity {
                         WORKER_URL,
                         R.id.workerList,
                         R.layout.activity_worker,
-                        "getWorkers"
+                        "getWorkers",
+                            "workersList"
                     ));
 
                     fragmentTransaction.replace(R.id.fragment_content, worker);
@@ -100,12 +102,13 @@ public class NoticeList extends AppCompatActivity {
         });
     }
 
-    private Bundle setParameters(String url, int listViewId, int listLayoutId, String methodName) {
+    private Bundle setParameters(String url, int listViewId, int listLayoutId, String methodName, String initClass) {
         Bundle parameters = new Bundle();
         parameters.putString("url", url);
         parameters.putInt("listViewId", listViewId);
         parameters.putInt("listLayoutId", listLayoutId);
         parameters.putString("methodName", methodName);
+        parameters.putString("initClass", initClass);
         return parameters;
     }
 }

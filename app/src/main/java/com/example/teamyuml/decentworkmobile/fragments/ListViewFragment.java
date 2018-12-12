@@ -1,8 +1,10 @@
 package com.example.teamyuml.decentworkmobile.fragments;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +42,7 @@ public class ListViewFragment extends Fragment {
     private int listViewId;
     private int listLayoutId;
     private Method callMethod;
+    private String initClass;
     private ArrayAdapter<HashMap<String, String>> adapterClass;
 
     @Override
@@ -76,6 +79,7 @@ public class ListViewFragment extends Fragment {
         listViewId = bundle.getInt("listViewId");
         listLayoutId = bundle.getInt("listLayoutId");
         String methodName = bundle.getString("methodName");
+        initClass = bundle.getString("initClass");
 
         if (methodName != null) {
             callMethod = getClass().getDeclaredMethod(methodName);
@@ -94,9 +98,8 @@ public class ListViewFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 String clickedItem = data.get(position).get("id").toString();
-                System.out.println(listLayoutId);
 
-                if(listLayoutId == 2131361828) {
+                if(initClass == "NoticesList") {
                     Intent toNoticeDetail = new Intent(getActivity(), NoticeDetails.class);
                     toNoticeDetail.putExtra("choosenNotice", (String) clickedItem);
                     startActivity(toNoticeDetail);
@@ -157,6 +160,7 @@ public class ListViewFragment extends Fragment {
     private void getWorkers() {
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
             Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(JSONArray response) {
                 try {
@@ -166,28 +170,19 @@ public class ListViewFragment extends Fragment {
                         String id = String.valueOf(user.getInt("id"));
                         String name = user.getString("first_name");
                         String last_name = user.getString("last_name");
-
-                        /*TODO: Professions is a list so we have to
-                          think how we want to store it in viewHolder*/
                         JSONArray professionsJson = (JSONArray) profile.get("professions");
                         List<String> professions = new ArrayList<>();
                         for (int j = 0; j < professionsJson.length(); j++) {
                             professions.add(professionsJson.getString(j));
                         }
 
-                        HashMap<String, String> oneNotice = new HashMap<>();
-
-                        /**
-                         * This is needed but in adapter this field is not added for now:
-
-                         */
-                        oneNotice.put("id", id);
-                        oneNotice.put("name", name);
-                        oneNotice.put("lastName", last_name);
-                        oneNotice.put("city", profile.getString("city"));
-                        oneNotice.put("profession", profile.getString("professions"));
-
-                        data.add(oneNotice);
+                        HashMap<String, String> oneWorker = new HashMap<>();
+                        oneWorker.put("id", id);
+                        oneWorker.put("name", name);
+                        oneWorker.put("lastName", last_name);
+                        oneWorker.put("city", profile.getString("city"));
+                        oneWorker.put("profession", profile.getString("professions"));
+                        data.add(oneWorker);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

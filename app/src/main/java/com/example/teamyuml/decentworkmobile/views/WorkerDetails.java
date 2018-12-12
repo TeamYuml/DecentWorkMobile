@@ -1,5 +1,7 @@
 package com.example.teamyuml.decentworkmobile.views;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -18,6 +20,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collector;
 
 public class WorkerDetails extends AppCompatActivity {
     String IdDetails;
@@ -64,7 +68,6 @@ public class WorkerDetails extends AppCompatActivity {
                     city.setText(city_s);
                     profession.setText((CharSequence) professions);
                     phone.setText(phone_s);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -77,7 +80,6 @@ public class WorkerDetails extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
             }
         });
-
         VolleyInstance.getInstance(this).addToRequestQueue(jsonObjectRequest, "noticeDetails");
     }
 }
