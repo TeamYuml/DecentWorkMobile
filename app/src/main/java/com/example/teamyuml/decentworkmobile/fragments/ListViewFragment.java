@@ -98,8 +98,7 @@ public class ListViewFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 String clickedItem = data.get(position).get("id").toString();
-
-                if(initClass == "NoticesList") {
+                if(initClass == "noticesList") {
                     Intent toNoticeDetail = new Intent(getActivity(), NoticeDetails.class);
                     toNoticeDetail.putExtra("choosenNotice", (String) clickedItem);
                     startActivity(toNoticeDetail);
@@ -160,7 +159,6 @@ public class ListViewFragment extends Fragment {
     private void getWorkers() {
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
             Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(JSONArray response) {
                 try {
