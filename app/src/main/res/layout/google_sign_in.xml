@@ -5,10 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".fragments.SignInGoogle">
 
-    <com.google.android.gms.common.SignInButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:id="@+id/btn_googleAuth"
-        android:text="Sign up with google"/>
-
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/round_google_button"/>
+		
 </FrameLayout>
