@@ -45,7 +45,7 @@ public class WorkerDetails extends AppCompatActivity {
     }
 
     private void getWorkerDetails() {
-        final String WORKER_DETAIL_URL = VolleyInstance.getBaseUrl() + "/profiles/" + IdDetails + "/";
+        final String WORKER_DETAIL_URL = VolleyInstance.getBaseUrl() + "/profiles/four/" + IdDetails + "/";
 
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest (
                 Request.Method.GET, WORKER_DETAIL_URL, null, new Response.Listener<JSONObject>() {
@@ -58,6 +58,7 @@ public class WorkerDetails extends AppCompatActivity {
                     String city_s = response.getString("city");
                     String phone_s = response.getString("phone");
                     JSONArray professionsJson = (JSONArray) user.get("professions");
+                    System.out.println(professionsJson);
                     List<String> professions = new ArrayList<>();
                     for (int j = 0; j < professionsJson.length(); j++) {
                         professions.add(professionsJson.getString(j));
@@ -80,6 +81,6 @@ public class WorkerDetails extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
             }
         });
-        VolleyInstance.getInstance(this).addToRequestQueue(jsonObjectRequest, "noticeDetails");
+        VolleyInstance.getInstance(this).addToRequestQueue(jsonObjectRequest, "workerDetails");
     }
 }
