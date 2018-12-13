@@ -123,12 +123,7 @@ public class SignInGoogle extends Fragment implements View.OnClickListener {
                             String token = response.getString("token");
                             int id = response.getInt("id");
 
-                            System.out.println("ID" + id);
-
                             UserAuth.saveAuthData(getActivity(), email, token, id);
-
-                            System.out.println("ID " + UserAuth.getId(getActivity()));
-                            System.out.println("Token " + UserAuth.getToken(getActivity()));
 
                             updateUI(account);
 

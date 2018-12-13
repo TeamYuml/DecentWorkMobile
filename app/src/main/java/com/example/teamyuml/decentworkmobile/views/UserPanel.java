@@ -2,6 +2,7 @@ package com.example.teamyuml.decentworkmobile.views;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +38,6 @@ public class UserPanel extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_panel);
-        System.out.println(UserAuth.getToken(this));
         USER_URL = VolleyInstance.getBaseUrl()
             + "/profiles/userProfiles/" + UserAuth.getId(UserPanel.this) + "/";
         initializeTextViews();
@@ -45,7 +45,6 @@ public class UserPanel extends AppCompatActivity {
     }
 
     private void getUserData() {
-        System.out.println("IDDD " + UserAuth.getId(this));
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest (
                 Request.Method.GET, USER_URL, null, new Response.Listener<JSONObject>() {
             @Override
@@ -125,7 +124,8 @@ public class UserPanel extends AppCompatActivity {
         name.setText(profile.get("name"));
         last_name.setText(profile.get("last_name"));
         city.setText(profile.get("city"));
-        //profession.setText((CharSequence) professions);
+        profession.setText(TextUtils.join(", ", professions));
+        System.out.println(professions);
         phone.setText(profile.get("phone"));
         description.setText(profile.get("description"));
     }
