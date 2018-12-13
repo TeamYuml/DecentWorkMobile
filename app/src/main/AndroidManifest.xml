@@ -31,7 +31,7 @@
             android:name=".views.Worker"
             android:parentActivityName=".views.NoticeList" />
         <activity android:name=".views.UserPanel"
-            android:parentActivityName=".views.NoticeList"></activity>
+            android:parentActivityName=".views.Login"></activity>
     </application>
 
 </manifest>

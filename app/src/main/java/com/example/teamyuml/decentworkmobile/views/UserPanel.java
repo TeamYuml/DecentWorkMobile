@@ -11,60 +11,50 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
+import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 public class UserPanel extends AppCompatActivity {
 
-    TextView name;
-    TextView profession;
-    TextView last_name;
-    TextView city;
-    TextView description;
-    TextView phone;
-    final static String USER_URL = "";
+    private TextView name;
+    private TextView profession;
+    private TextView last_name;
+    private TextView city;
+    private TextView description;
+    private TextView phone;
+    private String USER_URL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_panel);
-        name = findViewById(R.id.name);
-        last_name = findViewById(R.id.last_name);
-        city = findViewById(R.id.city);
-        profession = findViewById(R.id.profession);
-        description = findViewById(R.id.description);
-        phone = findViewById(R.id.phone);
+        System.out.println(UserAuth.getToken(this));
+        USER_URL = VolleyInstance.getBaseUrl()
+            + "/profiles/userProfiles/" + UserAuth.getId(UserPanel.this) + "/";
+        initializeTextViews();
         getUserData();
     }
-    private void getUserData() {
 
+    private void getUserData() {
+        System.out.println("IDDD " + UserAuth.getId(this));
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest (
                 Request.Method.GET, USER_URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONObject user = response.getJSONObject("user");
-                    String name_s = response.getString("name");
-                    String last_name_s = response.getString("last_name");
-                    String city_s = response.getString("city");
-                    String phone_s = response.getString("phone");
-                    String description_s = response.getString("description");
-                    JSONArray professionsJson = (JSONArray) user.get("professions");
-                    List<String> professions = new ArrayList<>();
-                    for (int j = 0; j < professionsJson.length(); j++) {
-                        professions.add(professionsJson.getString(j));
-                    }
-                    name.setText(name_s);
-                    last_name.setText(last_name_s);
-                    city.setText(city_s);
-                    profession.setText((CharSequence) professions);
-                    phone.setText(phone_s);
-                    description.setText(description_s);
+                    setAllTextViews(
+                        getResponse(response),
+                        getProfessions(response.getJSONArray("professions"))
+                    );
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -77,7 +67,66 @@ public class UserPanel extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
             }
         });
+
         VolleyInstance.getInstance(this).addToRequestQueue(jsonObjectRequest, "UserPanel");
     }
 
+    /**
+     * Initialize all {@link TextView} from layout.
+     */
+    private void initializeTextViews() {
+        name = findViewById(R.id.name);
+        last_name = findViewById(R.id.last_name);
+        city = findViewById(R.id.city);
+        profession = findViewById(R.id.profession);
+        description = findViewById(R.id.description);
+        phone = findViewById(R.id.phone);
+    }
+
+    /**
+     * Read response data except professions.
+     * @param response - Response data.
+     * @return Data about user.
+     * @throws JSONException - When wrong json is passed.
+     */
+    private Map<String, String> getResponse(JSONObject response) throws JSONException {
+        JSONObject user = response.getJSONObject("user");
+        Map<String, String> profile = new HashMap<>();
+        profile.put("name", user.getString("first_name"));
+        profile.put("last_name", user.getString("last_name"));
+        profile.put("city", response.getString("city"));
+        profile.put("description", response.getString("description"));
+        profile.put("phone", response.getString("phone_numbers"));
+
+        return profile;
+    }
+
+    /**
+     * Get user professions from response.
+     * @param response Profession list.
+     * @return List with professions names.
+     * @throws JSONException - When wrong {@link JSONArray} is passed.
+     */
+    private List<String> getProfessions(JSONArray response) throws JSONException {
+        List<String> professions = new ArrayList<>();
+
+        for (int i = 0; i < response.length(); i++) {
+            professions.add(response.getString(i));
+        }
+
+        return professions;
+    }
+
+    /**
+     * Set text to all {@link TextView} from layout.
+     * @param profile - Map with data about user.
+     */
+    private void setAllTextViews(Map<String, String> profile, List<String> professions) {
+        name.setText(profile.get("name"));
+        last_name.setText(profile.get("last_name"));
+        city.setText(profile.get("city"));
+        //profession.setText((CharSequence) professions);
+        phone.setText(profile.get("phone"));
+        description.setText(profile.get("description"));
+    }
 }

@@ -56,10 +56,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         // Go to next activity when user is already signed in
         if (account != null || UserAuth.getToken(this) != null) {
-            Toast.makeText(Login.this, "Logged already", Toast.LENGTH_LONG).show();
-            // TODO Intent to next activity
             Intent intent = new Intent(Login.this, UserPanel.class);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -86,7 +85,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         Toast.makeText(Login.this, email,
                             Toast.LENGTH_LONG).show();
 
-                        // TODO: ADD INTENT TO NEXT ACTIVITY
+                        Intent intent = new Intent(Login.this, UserPanel.class);
+                        startActivity(intent);
+                        finish();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
