@@ -120,8 +120,9 @@ public class SignInGoogle extends Fragment implements View.OnClickListener {
                         try {
                             String email = response.getString("email");
                             String token = response.getString("token");
+                            int id = response.getInt("id");
 
-                            UserAuth.saveAuthData(getActivity(), email, token);
+                            UserAuth.saveAuthData(getActivity(), email, token, id);
 
                             updateUI(account);
                             // TODO ADD INTENT

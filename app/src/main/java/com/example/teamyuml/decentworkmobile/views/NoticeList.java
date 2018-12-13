@@ -49,7 +49,6 @@ public class NoticeList extends AppCompatActivity {
         noticeList = findViewById(R.id.noticeList);
         noticeAll = new ArrayList<>();
         user = findViewById(R.id.user_panel);
-
     }
 
     private void getNotice() {

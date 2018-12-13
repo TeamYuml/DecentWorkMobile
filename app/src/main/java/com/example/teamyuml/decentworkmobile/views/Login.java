@@ -54,9 +54,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         super.onStart();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
+        // Go to next activity when user is already signed in
         if (account != null || UserAuth.getToken(this) != null) {
             Toast.makeText(Login.this, "Logged already", Toast.LENGTH_LONG).show();
             // TODO Intent to next activity
+            Intent intent = new Intent(Login.this, UserPanel.class);
+            startActivity(intent);
         }
     }
 
@@ -76,8 +79,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     try {
                         String email = response.getString("email");
                         String token = response.getString("token");
+                        int id = response.getInt("id");
 
-                        UserAuth.saveAuthData(Login.this, email, token);
+                        UserAuth.saveAuthData(Login.this, email, token, id);
 
                         Toast.makeText(Login.this, email,
                             Toast.LENGTH_LONG).show();
