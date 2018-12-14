@@ -16,4 +16,12 @@
         <item>Ogłoszenia</item>
         <item>Pracownicy</item>
     </string-array>
+
+    <!-- Error Strings -->
+    <string name="noConn">Brak internetu.</string>
+    <string name="noAuth">Brak autoryzacji. Spróbuj zalogować się ponownie.</string>
+    <string name="serverError">Coś poszło nie tak. Spróbuj ponownie.</string>
+    <string name="wrongJSON">Zły format odpowiedzi. Skontaktuj się z administratorem.</string>
+    <string name="wrongData">Wpisane dane nie są poprawne</string>
+    <!-- End Error Strings -->
 </resources>
