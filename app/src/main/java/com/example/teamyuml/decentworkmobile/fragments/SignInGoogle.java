@@ -18,6 +18,7 @@ import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.utils.CreateJson;
 import com.example.teamyuml.decentworkmobile.utils.UserAuth;
+import com.example.teamyuml.decentworkmobile.views.UserPanel;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -120,12 +121,14 @@ public class SignInGoogle extends Fragment implements View.OnClickListener {
                         try {
                             String email = response.getString("email");
                             String token = response.getString("token");
+                            int id = response.getInt("id");
 
-                            UserAuth.saveAuthData(getActivity(), email, token);
+                            UserAuth.saveAuthData(getActivity(), email, token, id);
 
                             updateUI(account);
-                            // TODO ADD INTENT
-                            Toast.makeText(getContext(), "logged", Toast.LENGTH_LONG).show();
+
+                            Intent intent = new Intent(getActivity(), UserPanel.class);
+                            startActivity(intent);
                             getActivity().finish();
                         } catch (JSONException e) {
                             e.printStackTrace();

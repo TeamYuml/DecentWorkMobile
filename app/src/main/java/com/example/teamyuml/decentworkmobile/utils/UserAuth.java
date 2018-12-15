@@ -18,11 +18,13 @@ public class UserAuth {
      * @param email User's email address.
      * @param token User's authentication token from server.
      */
-    public static void saveAuthData(Activity activity, String email, String token) {
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
+    public static void saveAuthData(Activity activity, String email, String token, int id) {
+        SharedPreferences sharedPref = activity.getSharedPreferences(
+            "com.example.decentworkmobile", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("email", email);
         editor.putString("token", token);
+        editor.putInt("id", id);
         editor.commit();
     }
 
@@ -32,7 +34,8 @@ public class UserAuth {
      * @return User's email address.
      */
     public static String getEmail(Activity activity) {
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = activity.getSharedPreferences(
+            "com.example.decentworkmobile", Context.MODE_PRIVATE);
         return sharedPref.getString("email", null);
     }
 
@@ -42,8 +45,15 @@ public class UserAuth {
      * @return User's authentication token.
      */
     public static String getToken(Activity activity) {
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = activity.getSharedPreferences(
+            "com.example.decentworkmobile", Context.MODE_PRIVATE);
         return sharedPref.getString("token", null);
+    }
+
+    public static int getId(Activity activity) {
+        SharedPreferences sharedPref = activity.getSharedPreferences(
+            "com.example.decentworkmobile", Context.MODE_PRIVATE);
+        return sharedPref.getInt("id", 0);
     }
 
     /**
