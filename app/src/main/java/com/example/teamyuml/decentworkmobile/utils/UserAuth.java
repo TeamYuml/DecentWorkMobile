@@ -12,6 +12,8 @@ import java.util.Map;
  */
 public class UserAuth {
 
+    private static final String fileName = "com.example.decentworkmobile";
+
     /**
      * Saves authentication data to shared preferences.
      * @param activity Calling activity.
@@ -20,12 +22,12 @@ public class UserAuth {
      */
     public static void saveAuthData(Activity activity, String email, String token, int id) {
         SharedPreferences sharedPref = activity.getSharedPreferences(
-            "com.example.decentworkmobile", Context.MODE_PRIVATE);
+            fileName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("email", email);
         editor.putString("token", token);
         editor.putInt("id", id);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -35,7 +37,7 @@ public class UserAuth {
      */
     public static String getEmail(Activity activity) {
         SharedPreferences sharedPref = activity.getSharedPreferences(
-            "com.example.decentworkmobile", Context.MODE_PRIVATE);
+            fileName, Context.MODE_PRIVATE);
         return sharedPref.getString("email", null);
     }
 
@@ -46,13 +48,13 @@ public class UserAuth {
      */
     public static String getToken(Activity activity) {
         SharedPreferences sharedPref = activity.getSharedPreferences(
-            "com.example.decentworkmobile", Context.MODE_PRIVATE);
+            fileName, Context.MODE_PRIVATE);
         return sharedPref.getString("token", null);
     }
 
     public static int getId(Activity activity) {
         SharedPreferences sharedPref = activity.getSharedPreferences(
-            "com.example.decentworkmobile", Context.MODE_PRIVATE);
+            fileName, Context.MODE_PRIVATE);
         return sharedPref.getInt("id", 0);
     }
 
@@ -65,5 +67,19 @@ public class UserAuth {
         Map<String, String> header = new HashMap<>();
         header.put("Authorization", "Token " + getToken(activity));
         return header;
+    }
+
+    /**
+     * Logout user from application.
+     * @param activity - Calling activity.
+     */
+    public static void logoutUser(Activity activity) {
+        SharedPreferences sharedPref = activity.getSharedPreferences(
+            fileName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.remove("token");
+        editor.remove("id");
+        editor.remove("email");
+        editor.apply();
     }
 }

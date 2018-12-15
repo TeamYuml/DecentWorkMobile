@@ -18,10 +18,17 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.teamyuml.decentworkmobile.BuildConfig;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 import com.example.teamyuml.decentworkmobile.fragments.ListViewFragment;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 public class NoticeList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Spinner panelSpinner;
@@ -113,6 +120,9 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
                 drawerLayout.closeDrawers();
                 startActivity(intent);
                 break;
+            case R.id.logout:
+                this.logout();
+                break;
         }
 
         return true;
@@ -127,6 +137,33 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
             menu.removeItem(R.id.login);
         } else {
             menu.removeItem(R.id.logout);
+        }
+    }
+
+    private void logout() {
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
+        if (account != null) {
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(BuildConfig.GoogleClientID)
+                .requestEmail()
+                .build();
+
+            GoogleSignInClient gsic = GoogleSignIn.getClient(this, gso);
+
+            gsic.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    UserAuth.logoutUser(NoticeList.this);
+                    finish();
+                    startActivity(getIntent());
+                }
+            });
+        } else {
+            UserAuth.logoutUser(NoticeList.this);
+            finish();
+            startActivity(getIntent());
         }
     }
 }
