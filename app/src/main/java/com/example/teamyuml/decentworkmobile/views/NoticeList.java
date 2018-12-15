@@ -43,7 +43,6 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         adjustMenu(navigationView.getMenu());
     }
 
