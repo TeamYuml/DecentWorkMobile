@@ -4,6 +4,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,7 @@ public class WorkerDetails extends AppCompatActivity {
     TextView city;
     TextView profession;
     TextView phone;
+    TextView description;
     List<String> workerDetails;
 
     @Override
@@ -41,6 +44,7 @@ public class WorkerDetails extends AppCompatActivity {
         last_name = findViewById(R.id.last_name);
         city = findViewById(R.id.city);
         profession = findViewById(R.id.profession);
+        description = findViewById(R.id.description);
         getWorkerDetails();
     }
 
@@ -53,12 +57,12 @@ public class WorkerDetails extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     JSONObject user = response.getJSONObject("user");
-                    String name_s = response.getString("name");
-                    String last_name_s = response.getString("last_name");
+                    String name_s = user.getString("first_name");
+                    String last_name_s = user.getString("last_name");
                     String city_s = response.getString("city");
-                    String phone_s = response.getString("phone");
-                    JSONArray professionsJson = (JSONArray) user.get("professions");
-                    System.out.println(professionsJson);
+                    String phone_s = response.getString("phone_numbers");
+                    String description_s = response.getString("description");
+                    JSONArray professionsJson = (JSONArray) response.get("professions");
                     List<String> professions = new ArrayList<>();
 
                     for (int j = 0; j < professionsJson.length(); j++) {
@@ -68,8 +72,9 @@ public class WorkerDetails extends AppCompatActivity {
                     name.setText(name_s);
                     last_name.setText(last_name_s);
                     city.setText(city_s);
-                    profession.setText((CharSequence) professions);
+                    profession.setText(TextUtils.join(",",professions));
                     phone.setText(phone_s);
+                    description.setText(description_s);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
