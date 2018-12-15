@@ -1,11 +1,11 @@
 package com.example.teamyuml.decentworkmobile.views;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,132 +13,76 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
+import com.example.teamyuml.decentworkmobile.fragments.ListViewFragment;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-public class NoticeList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-
-    ArrayList<HashMap<String, String>> noticeAll;
-    private ListView noticeList;
+public class NoticeList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Spinner panelSpinner;
-    private static final String NOTICE_URL = VolleyInstance.getBaseUrl() + "/engagments/";
-    ImageButton user;
+    FragmentManager fragmentManager;
+
+    private final String NOTICE_URL = VolleyInstance.getBaseUrl() + "/engagments/";
+    private final String WORKER_URL = VolleyInstance.getBaseUrl() + "/profiles/userProfiles/";
     private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getNotice();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_list);
+        fragmentManager = this.getSupportFragmentManager();
         panelSpinner = findViewById(R.id.panel_spinner);
         panelSpinnerAdapter();
-        noticeList = findViewById(R.id.noticeList);
-        noticeAll = new ArrayList<>();
+
         drawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void getNotice() {
-        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET, NOTICE_URL, null, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        String profession = null;
-                        String title = null;
-                        Integer id = null;
-
-                        try {
-                            JSONArray results = response.getJSONArray("results");
-                            
-                            for (int i = 0; i < results.length(); i++) {
-                                JSONObject notice = results.getJSONObject(i);
-                                id = notice.getInt("id");
-                                title = notice.getString("title");
-                                profession = notice.getString("profession");
-
-                                HashMap<String, String> oneNotice = new HashMap<>();
-                                oneNotice.put("id", String.valueOf(id));
-                                oneNotice.put("title", title);
-                                oneNotice.put("profession", profession);
-
-                                noticeAll.add(oneNotice);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        if (noticeAll != null) {
-                            initNoticeList();
-                            Toast.makeText(NoticeList.this,
-                                    "Pobrano " + noticeAll.size() + " ogłoszenia",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(NoticeList.this,
-                                "Coś poszło nie tak",
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
-
-        VolleyInstance.getInstance(this).addToRequestQueue(jsonObjectRequest, "noticeList");
-    }
-
-    /**
-     * Set adapter to ListView and add clickListener event to get clicked data
-     */
-    private void initNoticeList() {
-        CustomListView adapter = new CustomListView(this, noticeAll);
-        noticeList.setAdapter(adapter);
-
-        noticeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                String clickedItem = noticeAll.get(position).get("id").toString();
-                Intent toNoticeDatail = new Intent(NoticeList.this, NoticeDetails.class);
-                toNoticeDatail.putExtra("choosenNotice", (String) clickedItem);
-                startActivity(toNoticeDatail);
-
-            }
-        });
-    }
-
     private void panelSpinnerAdapter() {
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
-                this, R.array.notice_list, android.R.layout.simple_spinner_dropdown_item);
+            this, R.array.notice_list, android.R.layout.simple_spinner_dropdown_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         panelSpinner.setAdapter(spinnerAdapter);
 
         panelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (parent.getItemIdAtPosition(position) == 1) {
-                    Intent toWorker = new Intent(NoticeList.this ,Worker.class);
-                    startActivity(toWorker);
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                if (parent.getItemIdAtPosition(position) == 0) {
+                    Fragment notice = new ListViewFragment();
+
+                    notice.setArguments(setParameters(
+                        NOTICE_URL,
+                        R.id.noticeList,
+                        R.layout.notice_list_view,
+                        "getNotice",
+                        "NoticeDetails"
+                    ));
+
+                    fragmentTransaction.replace(R.id.fragment_content, notice);
+                } else if (parent.getItemIdAtPosition(position) == 1) {
+                    Fragment worker = new ListViewFragment();
+
+                    worker.setArguments(setParameters(
+                        WORKER_URL,
+                        R.id.workerList,
+                        R.layout.activity_worker,
+                        "getWorkers",
+                        "WorkerDetails"
+                    ));
+
+                    fragmentTransaction.replace(R.id.fragment_content, worker);
                 }
+
+                //progress dialog
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
 
             @Override
@@ -146,6 +90,16 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
                 Toast.makeText(NoticeList.this, "Nic nie wybrałes", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private Bundle setParameters(String url, int listViewId, int listLayoutId, String methodName, String initClass) {
+        Bundle parameters = new Bundle();
+        parameters.putString("url", url);
+        parameters.putInt("listViewId", listViewId);
+        parameters.putInt("listLayoutId", listLayoutId);
+        parameters.putString("methodName", methodName);
+        parameters.putString("initClass", initClass);
+        return parameters;
     }
 
     @Override
