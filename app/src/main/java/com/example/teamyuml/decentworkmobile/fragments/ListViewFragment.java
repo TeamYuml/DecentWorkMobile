@@ -44,7 +44,7 @@ public class ListViewFragment extends Fragment {
     private int listLayoutId;
     private Method callMethod;
     private String initClass;
-    private String packageName;
+    private String packageName = "com.example.teamyuml.decentworkmobile.views";
     private ArrayAdapter<HashMap<String, String>> adapterClass;
 
     @Override
@@ -82,7 +82,6 @@ public class ListViewFragment extends Fragment {
         listLayoutId = bundle.getInt("listLayoutId");
         String methodName = bundle.getString("methodName");
         initClass = bundle.getString("initClass");
-        packageName = bundle.getString("packageName");
 
         if (methodName != null) {
             callMethod = getClass().getDeclaredMethod(methodName);
@@ -102,9 +101,9 @@ public class ListViewFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 String clickedItem = data.get(position).get("id").toString();
                 try {
-                    Intent toNoticeDetail = new Intent(getActivity(), Class.forName(packageName + "." + initClass));
-                    toNoticeDetail.putExtra("choosenProfile", (String) clickedItem);
-                    startActivity(toNoticeDetail);
+                    Intent toSelectedDetail = new Intent(getActivity(), Class.forName(packageName + "." + initClass));
+                    toSelectedDetail.putExtra("choosenProfile", (String) clickedItem);
+                    startActivity(toSelectedDetail);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }

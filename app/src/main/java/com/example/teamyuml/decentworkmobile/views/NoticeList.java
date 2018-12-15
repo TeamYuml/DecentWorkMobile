@@ -62,8 +62,7 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
                         R.id.noticeList,
                         R.layout.notice_list_view,
                         "getNotice",
-                        "NoticeDetails",
-                            "com.example.teamyuml.decentworkmobile.views"
+                        "NoticeDetails"
                     ));
 
                     fragmentTransaction.replace(R.id.fragment_content, notice);
@@ -75,8 +74,7 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
                         R.id.workerList,
                         R.layout.activity_worker,
                         "getWorkers",
-                        "WorkerDetails",
-                            "com.example.teamyuml.decentworkmobile.views"
+                        "WorkerDetails"
                     ));
 
                     fragmentTransaction.replace(R.id.fragment_content, worker);
@@ -94,14 +92,13 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
         });
     }
 
-    private Bundle setParameters(String url, int listViewId, int listLayoutId, String methodName, String initClass, String packageName) {
+    private Bundle setParameters(String url, int listViewId, int listLayoutId, String methodName, String initClass) {
         Bundle parameters = new Bundle();
         parameters.putString("url", url);
         parameters.putInt("listViewId", listViewId);
         parameters.putInt("listLayoutId", listLayoutId);
         parameters.putString("methodName", methodName);
         parameters.putString("initClass", initClass);
-        parameters.putString("packageName", packageName);
         return parameters;
     }
 
