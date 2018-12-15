@@ -9,6 +9,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,6 +27,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
+import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,10 +55,13 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
         panelSpinnerAdapter();
         noticeList = findViewById(R.id.noticeList);
         noticeAll = new ArrayList<>();
+
         drawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        adjustMenu(navigationView.getMenu());
     }
 
     private void getNotice() {
@@ -159,5 +164,17 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
         }
 
         return true;
+    }
+
+    /**
+     * Check if user is logged and adjust menu items to it.
+     * @param menu - Navigation view menu.
+     */
+    private void adjustMenu(Menu menu) {
+        if (UserAuth.getToken(NoticeList.this) != null) {
+            menu.removeItem(R.id.login);
+        } else {
+            menu.removeItem(R.id.logout);
+        }
     }
 }

@@ -3,6 +3,10 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/login"
-            android:title="@string/menu_login"/>
+            android:title="@string/menu_login" />
+
+        <item
+            android:id="@+id/logout"
+            android:title="@string/menu_logout" />
     </group>
 </menu>
