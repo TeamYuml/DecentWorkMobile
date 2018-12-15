@@ -12,6 +12,10 @@
     <string name="btn_sign_up">Register</string>
     <string name="btn_link_login">Login</string>
 
+    <!-- Drawer menu strings -->
+    <string name="menu_login">Logowanie</string>
+    <!-- End drawer menu strings -->
+
     <string-array name="notice_list">
         <item>Ogłoszenia</item>
         <item>Pracownicy</item>

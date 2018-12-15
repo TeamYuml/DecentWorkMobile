@@ -4,11 +4,16 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,12 +35,14 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class NoticeList extends AppCompatActivity {
+public class NoticeList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     ArrayList<HashMap<String, String>> noticeAll;
     private ListView noticeList;
     Spinner panelSpinner;
     private static final String NOTICE_URL = VolleyInstance.getBaseUrl() + "/engagments/";
+    ImageButton user;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +53,10 @@ public class NoticeList extends AppCompatActivity {
         panelSpinnerAdapter();
         noticeList = findViewById(R.id.noticeList);
         noticeAll = new ArrayList<>();
+        drawerLayout = findViewById(R.id.drawer_layout);
 
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     private void getNotice() {
@@ -136,5 +146,18 @@ public class NoticeList extends AppCompatActivity {
                 Toast.makeText(NoticeList.this, "Nic nie wybrałes", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.login:
+                Intent intent = new Intent(this, Login.class);
+                drawerLayout.closeDrawers();
+                startActivity(intent);
+                break;
+        }
+
+        return true;
     }
 }
