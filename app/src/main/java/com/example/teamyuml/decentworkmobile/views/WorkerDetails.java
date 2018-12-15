@@ -36,7 +36,7 @@ public class WorkerDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_worker_details);
-        IdDetails = getIntent().getStringExtra("choosenWorker");
+        IdDetails = getIntent().getStringExtra("choosenProfile");
         name = findViewById(R.id.name);
         last_name = findViewById(R.id.last_name);
         city = findViewById(R.id.city);
@@ -60,7 +60,7 @@ public class WorkerDetails extends AppCompatActivity {
                     JSONArray professionsJson = (JSONArray) user.get("professions");
                     System.out.println(professionsJson);
                     List<String> professions = new ArrayList<>();
-                    
+
                     for (int j = 0; j < professionsJson.length(); j++) {
                         professions.add(professionsJson.getString(j));
                     }

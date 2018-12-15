@@ -29,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Console;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class ListViewFragment extends Fragment {
     private int listLayoutId;
     private Method callMethod;
     private String initClass;
+    private String packageName;
     private ArrayAdapter<HashMap<String, String>> adapterClass;
 
     @Override
@@ -80,6 +82,7 @@ public class ListViewFragment extends Fragment {
         listLayoutId = bundle.getInt("listLayoutId");
         String methodName = bundle.getString("methodName");
         initClass = bundle.getString("initClass");
+        packageName = bundle.getString("packageName");
 
         if (methodName != null) {
             callMethod = getClass().getDeclaredMethod(methodName);
@@ -98,14 +101,12 @@ public class ListViewFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 String clickedItem = data.get(position).get("id").toString();
-                if(initClass == "noticesList") {
-                    Intent toNoticeDetail = new Intent(getActivity(), NoticeDetails.class);
-                    toNoticeDetail.putExtra("choosenNotice", (String) clickedItem);
+                try {
+                    Intent toNoticeDetail = new Intent(getActivity(), Class.forName(packageName + "." + initClass));
+                    toNoticeDetail.putExtra("choosenProfile", (String) clickedItem);
                     startActivity(toNoticeDetail);
-                }else {
-                    Intent toWorkerDetail = new Intent(getActivity(), WorkerDetails.class);
-                    toWorkerDetail.putExtra("choosenWorker", (String) clickedItem);
-                    startActivity(toWorkerDetail);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
         });
