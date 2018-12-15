@@ -157,23 +157,19 @@ public class ListViewFragment extends Fragment {
     }
 
     private void getWorkers() {
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-            Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+            Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONArray response) {
+            public void onResponse(JSONObject response) {
                 try {
-                    for (int i = 0; i < response.length(); i++) {
-                        JSONObject profile = response.getJSONObject(i);
+                    JSONArray results = response.getJSONArray("results");
+
+                    for (int i = 0; i < results.length(); i++) {
+                        JSONObject profile = results.getJSONObject(i);
                         JSONObject user = profile.getJSONObject("user");
                         String id = String.valueOf(user.getInt("id"));
                         String name = user.getString("first_name");
                         String last_name = user.getString("last_name");
-                        JSONArray professionsJson = (JSONArray) profile.get("professions");
-                        List<String> professions = new ArrayList<>();
-                        for (int j = 0; j < professionsJson.length(); j++) {
-                            professions.add(professionsJson.getString(j));
-                        }
-
                         HashMap<String, String> oneWorker = new HashMap<>();
                         oneWorker.put("id", id);
                         oneWorker.put("name", name);
@@ -204,6 +200,6 @@ public class ListViewFragment extends Fragment {
             }
         });
 
-        VolleyInstance.getInstance(getActivity()).addToRequestQueue(jsonArrayRequest, "workers");
+        VolleyInstance.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, "workers");
     }
 }
