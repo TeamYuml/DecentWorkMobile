@@ -26,12 +26,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="40dp" />
 
-            <ListView
-                android:id="@+id/noticeList"
+            <FrameLayout
+                android:id="@+id/fragment_content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@android:dimen/app_icon_size"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                android:layout_height="wrap_content"
                 tools:layout_editor_absoluteX="16dp" />
 
         </LinearLayout>
