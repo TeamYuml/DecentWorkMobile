@@ -36,7 +36,7 @@ public class NoticeDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_details);
-        IdDetails = getIntent().getStringExtra("choosenNotice");
+        IdDetails = getIntent().getStringExtra("choosenProfile");
         title = findViewById(R.id.title);
         profession = findViewById(R.id.profession);
         owner = findViewById(R.id.owner);
