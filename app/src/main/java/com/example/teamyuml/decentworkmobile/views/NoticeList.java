@@ -133,7 +133,6 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
         return true;
     }
 
-
     /**
      * Check if user is logged and adjust menu items to it.
      * @param menu - Navigation view menu.
