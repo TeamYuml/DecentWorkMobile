@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
         app:srcCompat="@drawable/title_login" />
 		
@@ -40,10 +40,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/alegreya_bold"
+            android:fontFamily="@font/alegreya_sans_medium"
             android:gravity="center"
             android:text="E-mail"
             android:textSize="15sp" />
+
         <EditText
             android:id="@+id/email_input"
             android:layout_width="match_parent"
@@ -55,7 +56,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/alegreya_bold"
+            android:fontFamily="@font/alegreya_sans_medium"
             android:gravity="center"
             android:text="Password"
             android:textSize="15sp" />
@@ -70,10 +71,9 @@
             android:inputType="textPassword" />
 
         <TextView
-            font
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/alegreya_sans_thin"
+            android:fontFamily="@font/alegreya_sans_bold"
             android:gravity="center"
             android:text="or by google account"
             android:textSize="20sp" />
@@ -102,7 +102,6 @@
             android:background="@color/registration_button_background"
             android:text="@string/btn_link_signup"
             android:textColor="@android:color/black" />
-
     </LinearLayout>
 
 </LinearLayout>
