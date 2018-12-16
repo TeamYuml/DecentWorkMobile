@@ -11,6 +11,6 @@
 
         <item
             android:id="@+id/userPanel"
-            android:title="User panel" />
+            android:title="@string/menu_user_panel" />
     </group>
 </menu>

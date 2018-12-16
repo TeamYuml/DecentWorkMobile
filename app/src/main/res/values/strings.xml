@@ -15,6 +15,7 @@
     <!-- Drawer menu strings -->
     <string name="menu_login">Logowanie</string>
     <string name="menu_logout">Wyloguj</string>
+    <string name="menu_user_panel">Mój profil</string>
     <!-- End drawer menu strings -->
 
     <string-array name="notice_list">
