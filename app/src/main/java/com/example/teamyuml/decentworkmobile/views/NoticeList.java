@@ -123,10 +123,16 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
             case R.id.logout:
                 this.logout();
                 break;
+            case R.id.userPanel:
+                Intent userPanel = new Intent(this, UserPanel.class);
+                drawerLayout.closeDrawers();
+                startActivity(userPanel);
+                break;
         }
 
         return true;
     }
+
 
     /**
      * Check if user is logged and adjust menu items to it.
@@ -137,6 +143,7 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
             menu.removeItem(R.id.login);
         } else {
             menu.removeItem(R.id.logout);
+            menu.removeItem(R.id.userPanel);
         }
     }
 
