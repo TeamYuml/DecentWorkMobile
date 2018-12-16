@@ -16,11 +16,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
+import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +36,7 @@ public class ProfileDetailsFragment extends Fragment {
     private TextView city;
     private TextView description;
     private TextView phone;
+    private String URL = VolleyInstance.getBaseUrl() + "/profiles/userProfiles/";
     private String USER_URL;
 
     @Override
@@ -42,12 +45,9 @@ public class ProfileDetailsFragment extends Fragment {
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-
         View v = inflater.inflate(R.layout.fragment_profiles_details, container, false);
-        USER_URL = VolleyInstance.getBaseUrl() + "/profiles/userProfiles/" + 5 + "/";
-
-        //String ad = getArguments().getString("URL");
-
+        Serializable id = (UserAuth.getId(getActivity()) != 0) ? UserAuth.getId(getActivity()) : getActivity().getIntent().getStringExtra("choosenProfile");
+        USER_URL = URL + id;
         name = v.findViewById(R.id.name);
         last_name = v.findViewById(R.id.last_name);
         city = v.findViewById(R.id.city);
@@ -85,6 +85,12 @@ public class ProfileDetailsFragment extends Fragment {
         VolleyInstance.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, "ProfileDetails");
     }
 
+    /**
+     * Read response data except professions.
+     * @param response - Response data.
+     * @return Data about user.
+     * @throws JSONException - When wrong json is passed.
+     */
     private Map<String, String> getResponse(JSONObject response) throws JSONException {
         JSONObject user = response.getJSONObject("user");
         Map<String, String> profile = new HashMap<>();
@@ -97,6 +103,12 @@ public class ProfileDetailsFragment extends Fragment {
         return profile;
     }
 
+    /**
+     * Get user professions from response.
+     * @param response Profession list.
+     * @return List with professions names.
+     * @throws JSONException - When wrong {@link JSONArray} is passed.
+     */
     private List<String> getProfessions(JSONArray response) throws JSONException {
         List<String> professions = new ArrayList<>();
 
@@ -107,6 +119,10 @@ public class ProfileDetailsFragment extends Fragment {
         return professions;
     }
 
+    /**
+     * Set text to all {@link TextView} from layout.
+     * @param profile - Map with data about user.
+     */
     private void setAllTextViews(Map<String, String> profile, List<String> professions) {
         name.setText(profile.get("name"));
         last_name.setText(profile.get("last_name"));
