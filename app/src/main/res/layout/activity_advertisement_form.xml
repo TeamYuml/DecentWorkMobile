@@ -6,25 +6,6 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Advertiser"
-        android:textSize="20sp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp" />
-
-    <EditText
-        android:id="@+id/Advertiser_Name"
-        android:layout_width="357dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="46dp" />
-
-    <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,7 +20,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text=""
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="161dp" />
 
@@ -54,25 +35,6 @@
 
     <EditText
         android:id="@+id/Advertiser_Description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="More about your Advertisment"
-        android:textSize="20sp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="272dp" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Profession"
-        android:textSize="20sp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="245dp" />
-
-    <EditText
-        android:id="@+id/Advertiser_Proffesion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="More about your Advertisment"
@@ -98,9 +60,7 @@
         android:textSize="20sp"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="272dp"
-        />
-
+        tools:layout_editor_absoluteY="272dp" />
 
     <Button
         android:id="@+id/Advertiser_Add"
@@ -119,5 +79,4 @@
         android:textSize="20sp"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="245dp" />
-
 </LinearLayout>
