@@ -2,13 +2,13 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <solid android:color="#87CEEB"/>
+            <solid android:color="#87CEEB" />
         </shape>
     </item>
     <item android:drawable="@drawable/google"
           android:bottom="10dp"
           android:top="10dp"
           android:left="10dp"
-          android:right="10dp" >
+          android:right="10dp">
     </item>
 </layer-list>

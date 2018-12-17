@@ -10,6 +10,6 @@
         android:layout_height="70dp"
         android:id="@+id/btn_googleAuth"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/round_google_button"/>
+        android:background="@drawable/round_google_button" />
 		
 </FrameLayout>
