@@ -43,7 +43,7 @@ public class AdvertismentAdd extends AppCompatActivity implements View.OnClickLi
     private TextView ErrorTextView;
     List<String> Cities ;
     String selected_city;
-    private static final String Engagment_add_URL = VolleyInstance.getBaseUrl() + "/engagments/";
+    private static final String Engagment_add_URL = VolleyInstance.getBaseUrl() + "/engagments/engagments/";
     private static final String TAG = "Create Advertisment";
     ProgressDialog progressDialog;
     @Override
@@ -97,6 +97,7 @@ public class AdvertismentAdd extends AppCompatActivity implements View.OnClickLi
                 hideDialog();
 
                 try {
+
                     String owner = response.getString("owner");
                     ErrorTextView.setText("pomyslnie dodano" + owner);
                 }
@@ -115,15 +116,7 @@ public class AdvertismentAdd extends AppCompatActivity implements View.OnClickLi
             }
 
             protected Map<String, String> getHeaders () throws AuthFailureError {
-                String userAgent = System.getProperty("http.agent");
-                String credentials = "n4dregner@gmail.com:mintaj123";
-                String auth = "Basic "
-                        + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-type", "application/json");
-                headers.put("Authorization", auth);
-                headers.put("User-agent", userAgent);
-                return headers;
+                return UserAuth.authorizationHeader(AdvertismentAdd.this);
             }
         });
 

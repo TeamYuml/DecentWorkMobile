@@ -39,7 +39,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         emailInput = findViewById(R.id.email_input);
         passwordInput = findViewById(R.id.password_input);
         signIn = findViewById(R.id.sign_in);
@@ -56,7 +55,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         // Go to next activity when user is already signed in
         if (account != null || UserAuth.getToken(this) != null) {
-            Intent intent = new Intent(Login.this, UserPanel.class);
+            Intent intent = new Intent(Login.this, AdvertismentAdd.class);
             startActivity(intent);
             finish();
         }
@@ -85,7 +84,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         Toast.makeText(Login.this, email,
                             Toast.LENGTH_LONG).show();
 
-                        Intent intent = new Intent(Login.this, UserPanel.class);
+                        Intent intent = new Intent(Login.this, AdvertismentAdd.class);
                         startActivity(intent);
                         finish();
                     } catch (JSONException e) {
