@@ -11,6 +11,8 @@
     <string name="hint_City">City:</string>
     <string name="btn_sign_up">Register</string>
     <string name="btn_link_login">Login</string>
+    <string name="btn_assign">Zgłoś się</string>
+    <string name="btn_remove_assign">Anuluj zgłoszenie</string>
 
     <!-- Drawer menu strings -->
     <string name="menu_login">Logowanie</string>

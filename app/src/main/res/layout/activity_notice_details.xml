@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="223dp"
             android:orientation="vertical">
 
             <TextView
@@ -51,6 +51,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView" />
+
+            <Button
+                android:id="@+id/assign_button"
+                android:layout_width="154dp"
+                android:layout_height="18dp"
+                android:layout_weight="1"
+                android:onClick="makeAssign"
+                android:text="@string/btn_assign" />
+
+            <Button
+                android:id="@+id/remove_assign"
+                android:layout_width="156dp"
+                android:layout_height="wrap_content"
+                android:onClick="removeAssign"
+                android:text="@string/btn_remove_assign" />
+
         </LinearLayout>
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
