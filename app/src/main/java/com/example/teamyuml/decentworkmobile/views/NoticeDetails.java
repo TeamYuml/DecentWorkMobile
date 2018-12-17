@@ -47,7 +47,7 @@ public class NoticeDetails extends AppCompatActivity {
     }
 
     private void getNoticeDetails() {
-        final String NOTICE_DETAIL_URL = VolleyInstance.getBaseUrl() + "/engagments/" + IdDetails + "/";
+        final String NOTICE_DETAIL_URL = VolleyInstance.getBaseUrl() + "/engagments/engagments/" + IdDetails + "/";
 
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest (
                 Request.Method.GET, NOTICE_DETAIL_URL, null, new Response.Listener<JSONObject>() {
