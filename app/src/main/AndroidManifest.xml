@@ -31,7 +31,7 @@
             android:parentActivityName=".views.NoticeList" />
         <activity android:name=".views.UserPanel"
             android:parentActivityName=".views.NoticeList" />
-        <activity android:name=".views.AdvertismentAdd"
+        <activity android:name=".views.EngagmentAdd"
             android:parentActivityName=".views.NoticeList" />
     </application>
 
