@@ -1,4 +1,4 @@
-﻿package com.example.teamyuml.decentworkmobile.views;
+package com.example.teamyuml.decentworkmobile.views;
 
 import android.app.DownloadManager;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.utils.CreateJson;
@@ -38,6 +39,8 @@ public class NoticeDetails extends AppCompatActivity {
     private TextView description;
     private TextView created;
     private Button removeButton;
+    private Button assignButton;
+    private String CHECK_ASSIGN_URL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +49,11 @@ public class NoticeDetails extends AppCompatActivity {
         IdDetails = getIntent().getStringExtra("choosenProfile");
         initializeTextViews();
         getNoticeDetails();
-        //TODO ADD TO CHECK IF USER IS ALREADY ASSIGNED
+
+        CHECK_ASSIGN_URL = VolleyInstance.getBaseUrl() + "/engagments/assign/check/?engagment=" + IdDetails;
         removeButton = findViewById(R.id.remove_assign);
-        removeButton.setVisibility(View.GONE);
+        assignButton = findViewById(R.id.assign_button);
+        checkAssign();
     }
 
     /**
@@ -58,7 +63,24 @@ public class NoticeDetails extends AppCompatActivity {
     public void makeAssign(View v) {
         final String ASSIGN_URL = VolleyInstance.getBaseUrl() + "/engagments/assign/user/";
 
-        JsonObjectRequest jsonObjectRequest = makeRequest(ASSIGN_URL, addParam());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+            Request.Method.POST, ASSIGN_URL, addParam(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                changeButton();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ErrorHandler.errorHandler(error, NoticeDetails.this);
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return UserAuth.authorizationHeader(NoticeDetails.this);
+            }
+        };
+
         VolleyInstance.getInstance(this).addToRequestQueue(jsonObjectRequest, "assign");
     }
 
@@ -70,8 +92,25 @@ public class NoticeDetails extends AppCompatActivity {
         final String REMOVE_ASSIGN_URL = VolleyInstance.getBaseUrl()
             + "/engagments/assign/user/" + IdDetails + "/";
 
-        JsonObjectRequest jsonObjectRequest = makeRequest(REMOVE_ASSIGN_URL, null);
-        VolleyInstance.getInstance(this).addToRequestQueue(jsonObjectRequest, "removeAssign");
+        StringRequest stringRequest = new StringRequest(
+            Request.Method.DELETE, REMOVE_ASSIGN_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                changeButton();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ErrorHandler.errorHandler(error, NoticeDetails.this);
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return UserAuth.authorizationHeader(NoticeDetails.this);
+            }
+        };
+
+        VolleyInstance.getInstance(this).addToRequestQueue(stringRequest, "removeAssign");
     }
 
     /**
@@ -122,9 +161,41 @@ public class NoticeDetails extends AppCompatActivity {
         VolleyInstance.getInstance(this).addToRequestQueue(jsonObjectRequest, "noticeDetails");
     }
 
-    private JsonObjectRequest makeRequest(String URL, JSONObject data) {
+    private void checkAssign() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+            Request.Method.GET, CHECK_ASSIGN_URL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getBoolean("is_assigned")) {
+                        assignButton.setVisibility(View.GONE);
+                        removeButton.setVisibility(View.VISIBLE);
+                    } else {
+                        assignButton.setVisibility(View.VISIBLE);
+                        removeButton.setVisibility(View.GONE);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ErrorHandler.errorHandler(error, NoticeDetails.this);
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return UserAuth.authorizationHeader(NoticeDetails.this);
+            }
+        };
+
+        VolleyInstance.getInstance(this).addToRequestQueue(jsonObjectRequest, "checkAssign");
+    }
+
+    private JsonObjectRequest makeRequest(String URL, JSONObject data, int method) {
         return new JsonObjectRequest(
-            Request.Method.DELETE, URL, data, new Response.Listener<JSONObject>() {
+            method, URL, data, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 changeButton();
@@ -163,8 +234,6 @@ public class NoticeDetails extends AppCompatActivity {
      * Change state of buttons.
      */
     private void changeButton() {
-        Button assignButton = findViewById(R.id.assign_button);
-
         if (assignButton.getVisibility() == View.GONE) {
             assignButton.setVisibility(View.VISIBLE);
             removeButton.setVisibility(View.GONE);
