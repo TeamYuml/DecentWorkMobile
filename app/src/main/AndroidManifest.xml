@@ -27,10 +27,14 @@
         <activity
             android:name=".views.NoticeDetails"
             android:parentActivityName=".views.NoticeList" />
-        <activity android:name=".views.WorkerDetails"
+        <activity
+            android:name=".views.WorkerDetails"
             android:parentActivityName=".views.NoticeList" />
-        <activity android:name=".views.UserPanel"
+        <activity
+            android:name=".views.UserPanel"
             android:parentActivityName=".views.NoticeList" />
+        <activity android:name=".views.UserNotices"
+            android:parentActivityName=".views.NoticeList"/>
     </application>
 
 </manifest>

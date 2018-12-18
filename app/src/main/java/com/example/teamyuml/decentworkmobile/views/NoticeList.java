@@ -128,6 +128,11 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
                 drawerLayout.closeDrawers();
                 startActivity(userPanel);
                 break;
+            case R.id.userNotices:
+                Intent userNotices = new Intent(this, UserNotices.class);
+                drawerLayout.closeDrawers();
+                startActivity(userNotices);
+                break;
         }
 
         return true;
@@ -143,6 +148,7 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
         } else {
             menu.removeItem(R.id.logout);
             menu.removeItem(R.id.userPanel);
+            menu.removeItem(R.id.userNotices);
         }
     }
 
