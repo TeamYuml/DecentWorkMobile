@@ -36,6 +36,8 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
 
     private final String NOTICE_URL = VolleyInstance.getBaseUrl() + "/engagments/engagments/";
     private final String WORKER_URL = VolleyInstance.getBaseUrl() + "/profiles/userProfiles/";
+    private final String USER_NOTICES_URL = VolleyInstance.getBaseUrl() + "/engagments/user/engagments/";
+
     private DrawerLayout drawerLayout;
 
     @Override
@@ -129,9 +131,19 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
                 startActivity(userPanel);
                 break;
             case R.id.userNotices:
-                Intent userNotices = new Intent(this, UserNotices.class);
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment notice = new ListViewFragment();
+                notice.setArguments(setParameters(
+                        USER_NOTICES_URL,
+                        R.id.noticeList,
+                        R.layout.notice_list_view,
+                        "getUserNotice",
+                        "NoticeDetails"
+                ));
+                fragmentTransaction.replace(R.id.fragment_content, notice);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
                 drawerLayout.closeDrawers();
-                startActivity(userNotices);
                 break;
         }
 
