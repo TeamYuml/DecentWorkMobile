@@ -14,16 +14,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
+import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 import com.example.teamyuml.decentworkmobile.views.CustomListView;
 import com.example.teamyuml.decentworkmobile.views.CustomWorkerView;
 import com.example.teamyuml.decentworkmobile.views.NoticeDetails;
 import com.example.teamyuml.decentworkmobile.views.WorkerDetails;
+import com.example.teamyuml.decentworkmobile.volley.ErrorHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +38,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ListViewFragment extends Fragment {
     private ArrayList<HashMap<String, String>> data;
@@ -121,16 +125,7 @@ public class ListViewFragment extends Fragment {
 
                     for (int i = 0; i < results.length(); i++) {
                         JSONObject notice = results.getJSONObject(i);
-                        int id = notice.getInt("id");
-                        String title = notice.getString("title");
-                        String profession = notice.getString("profession");
-
-                        HashMap<String, String> oneNotice = new HashMap<>();
-                        oneNotice.put("id", String.valueOf(id));
-                        oneNotice.put("title", title);
-                        oneNotice.put("profession", profession);
-
-                        data.add(oneNotice);
+                        getNoticeResponse(notice);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -152,6 +147,43 @@ public class ListViewFragment extends Fragment {
                     Toast.LENGTH_LONG).show();
             }
         });
+
+        VolleyInstance.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, "Notice");
+    }
+
+    private void getUserNotice() {
+        final JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(
+                Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject notice = response.getJSONObject(i);
+                        getNoticeResponse(notice);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (data != null) {
+                    adapterClass = new CustomListView(getActivity(), data);
+                    initListView();
+                    Toast.makeText(getActivity(),
+                            "Pobrano " + data.size() + " ogłoszenia",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ErrorHandler.errorHandler(error, getActivity());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return UserAuth.authorizationHeader(getActivity());
+            }
+        };
 
         VolleyInstance.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, "Notice");
     }
@@ -201,5 +233,13 @@ public class ListViewFragment extends Fragment {
         });
 
         VolleyInstance.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, "workers");
+    }
+
+    private void getNoticeResponse(JSONObject notice) throws JSONException {
+        HashMap<String, String> oneNotice = new HashMap<>();
+        oneNotice.put("id", String.valueOf(notice.getInt("id")));
+        oneNotice.put("title", notice.getString("title"));
+        oneNotice.put("profession", notice.getString("profession"));
+        data.add(oneNotice);
     }
 }

@@ -12,5 +12,9 @@
         <item
             android:id="@+id/userPanel"
             android:title="@string/menu_user_panel" />
+
+        <item
+            android:id="@+id/userNotices"
+            android:title="@string/menu_user_notices" />
     </group>
 </menu>
