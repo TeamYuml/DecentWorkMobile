@@ -49,11 +49,16 @@ public class NoticeDetails extends AppCompatActivity {
         IdDetails = getIntent().getStringExtra("choosenProfile");
         initializeTextViews();
         getNoticeDetails();
-
-        CHECK_ASSIGN_URL = VolleyInstance.getBaseUrl() + "/engagments/assign/check/?engagment=" + IdDetails;
         removeButton = findViewById(R.id.remove_assign);
         assignButton = findViewById(R.id.assign_button);
-        checkAssign();
+
+        if (UserAuth.getToken(NoticeDetails.this) != null) {
+            CHECK_ASSIGN_URL = VolleyInstance.getBaseUrl() + "/engagments/assign/check/?engagment=" + IdDetails;
+            checkAssign();
+        } else {
+            removeButton.setVisibility(View.GONE);
+            removeButton.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -145,6 +150,11 @@ public class NoticeDetails extends AppCompatActivity {
                             city.setText(city_s);
                             description.setText(description_s);
                             created.setText(created_s);
+
+                            if (owner_s.equals(UserAuth.getEmail(NoticeDetails.this))) {
+                                removeButton.setVisibility(View.GONE);
+                                removeButton.setVisibility(View.GONE);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
