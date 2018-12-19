@@ -236,13 +236,10 @@ public class ListViewFragment extends Fragment {
     }
 
     private void getNoticeResponse(JSONObject notice) throws JSONException {
-        int id = notice.getInt("id");
-        String title = notice.getString("title");
-        String profession = notice.getString("profession");
         HashMap<String, String> oneNotice = new HashMap<>();
-        oneNotice.put("id", String.valueOf(id));
-        oneNotice.put("title", title);
-        oneNotice.put("profession", profession);
+        oneNotice.put("id", String.valueOf(notice.getInt("id")));
+        oneNotice.put("title", notice.getString("title"));
+        oneNotice.put("profession", notice.getString("profession"));
         data.add(oneNotice);
     }
 }
