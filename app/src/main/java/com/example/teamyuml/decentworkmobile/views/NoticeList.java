@@ -133,13 +133,15 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
             case R.id.userNotices:
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment notice = new ListViewFragment();
+
                 notice.setArguments(setParameters(
-                        USER_NOTICES_URL,
-                        R.id.noticeList,
-                        R.layout.notice_list_view,
-                        "getUserNotice",
-                        "NoticeDetails"
+                    USER_NOTICES_URL,
+                    R.id.noticeList,
+                    R.layout.notice_list_view,
+                    "getUserNotice",
+                    "NoticeDetails"
                 ));
+
                 fragmentTransaction.replace(R.id.fragment_content, notice);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
