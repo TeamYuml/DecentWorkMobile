@@ -1,28 +1,26 @@
 package com.example.teamyuml.decentworkmobile.views;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.teamyuml.decentworkmobile.BuildConfig;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
-import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 import com.example.teamyuml.decentworkmobile.fragments.ListViewFragment;
+import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -30,9 +28,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+
 public class NoticeList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    Spinner panelSpinner;
     FragmentManager fragmentManager;
+    Toolbar toolbar;
 
     private final String NOTICE_URL = VolleyInstance.getBaseUrl() + "/engagments/engagments/";
     private final String WORKER_URL = VolleyInstance.getBaseUrl() + "/profiles/userProfiles/";
@@ -44,65 +43,38 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_list);
-        fragmentManager = this.getSupportFragmentManager();
-        panelSpinner = findViewById(R.id.panel_spinner);
-        panelSpinnerAdapter();
 
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        fragmentManager = this.getSupportFragmentManager();
         drawerLayout = findViewById(R.id.drawer_layout);
+
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment notice = new ListViewFragment();
+
+        notice.setArguments(setParameters(
+            NOTICE_URL,
+            R.id.noticeList,
+            R.layout.notice_list_view,
+            "getNotice",
+            "NoticeDetails"
+        ));
+
+        fragmentTransaction.replace(R.id.fragment_content, notice);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+        drawerLayout.closeDrawers();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         adjustMenu(navigationView.getMenu());
     }
 
-    private void panelSpinnerAdapter() {
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
-            this, R.array.notice_list, android.R.layout.simple_spinner_dropdown_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        panelSpinner.setAdapter(spinnerAdapter);
-
-        panelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                if (parent.getItemIdAtPosition(position) == 0) {
-                    Fragment notice = new ListViewFragment();
-
-                    notice.setArguments(setParameters(
-                        NOTICE_URL,
-                        R.id.noticeList,
-                        R.layout.notice_list_view,
-                        "getNotice",
-                        "NoticeDetails"
-                    ));
-
-                    fragmentTransaction.replace(R.id.fragment_content, notice);
-                } else if (parent.getItemIdAtPosition(position) == 1) {
-                    Fragment worker = new ListViewFragment();
-
-                    worker.setArguments(setParameters(
-                        WORKER_URL,
-                        R.id.workerList,
-                        R.layout.activity_worker,
-                        "getWorkers",
-                        "WorkerDetails"
-                    ));
-
-                    fragmentTransaction.replace(R.id.fragment_content, worker);
-                }
-
-                //progress dialog
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(NoticeList.this, "Nic nie wybrałes", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     private Bundle setParameters(String url, int listViewId, int listLayoutId, String methodName, String initClass) {
         Bundle parameters = new Bundle();
@@ -114,8 +86,22 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
         return parameters;
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment notice = new ListViewFragment();
+
         switch (menuItem.getItemId()) {
             case R.id.login:
                 Intent intent = new Intent(this, Login.class);
@@ -131,9 +117,6 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
                 startActivity(userPanel);
                 break;
             case R.id.userNotices:
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Fragment notice = new ListViewFragment();
-
                 notice.setArguments(setParameters(
                     USER_NOTICES_URL,
                     R.id.noticeList,
@@ -147,6 +130,35 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
                 fragmentTransaction.commit();
                 drawerLayout.closeDrawers();
                 break;
+            case R.id.noticeList:
+                notice.setArguments(setParameters(
+                    NOTICE_URL,
+                    R.id.noticeList,
+                    R.layout.notice_list_view,
+                    "getNotice",
+                    "NoticeDetails"
+                ));
+
+                fragmentTransaction.replace(R.id.fragment_content, notice);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                drawerLayout.closeDrawers();
+                break;
+            case R.id.workerList:
+                Fragment worker = new ListViewFragment();
+
+                worker.setArguments(setParameters(
+                    WORKER_URL,
+                    R.id.workerList,
+                    R.layout.activity_worker,
+                    "getWorkers",
+                    "WorkerDetails"
+                ));
+
+                fragmentTransaction.replace(R.id.fragment_content, worker);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                drawerLayout.closeDrawers();
         }
 
         return true;
@@ -193,4 +205,3 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
         }
     }
 }
-
