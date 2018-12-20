@@ -1,33 +1,26 @@
 package com.example.teamyuml.decentworkmobile.views;
 
-import android.app.DownloadManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
-import com.example.teamyuml.decentworkmobile.utils.CreateJson;
+import com.example.teamyuml.decentworkmobile.fragments.AssignButtons;
 import com.example.teamyuml.decentworkmobile.utils.UserAuth;
-import com.example.teamyuml.decentworkmobile.volley.ErrorHandler;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class NoticeDetails extends AppCompatActivity {
 
@@ -38,79 +31,18 @@ public class NoticeDetails extends AppCompatActivity {
     private TextView city;
     private TextView description;
     private TextView created;
-    private Button removeButton;
-    private Button assignButton;
-    private String CHECK_ASSIGN_URL;
+    private FragmentManager fragmentManager;
+
+    private int assignContent = R.id.assign_buttons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_details);
+        fragmentManager = this.getSupportFragmentManager();
         IdDetails = getIntent().getStringExtra("choosenProfile");
         initializeTextViews();
         getNoticeDetails();
-
-        CHECK_ASSIGN_URL = VolleyInstance.getBaseUrl() + "/engagments/assign/check/?engagment=" + IdDetails;
-        removeButton = findViewById(R.id.remove_assign);
-        assignButton = findViewById(R.id.assign_button);
-        checkAssign();
-    }
-
-    /**
-     * Button onClick which assign user to current viewing notice.
-     * @param v
-     */
-    public void makeAssign(View v) {
-        final String ASSIGN_URL = VolleyInstance.getBaseUrl() + "/engagments/assign/user/";
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-            Request.Method.POST, ASSIGN_URL, addParam(), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                changeButton();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ErrorHandler.errorHandler(error, NoticeDetails.this);
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                return UserAuth.authorizationHeader(NoticeDetails.this);
-            }
-        };
-
-        VolleyInstance.getInstance(this).addToRequestQueue(jsonObjectRequest, "assign");
-    }
-
-    /**
-     * Button onClick for removing assign.
-     * @param v
-     */
-    public void removeAssign(View v) {
-        final String REMOVE_ASSIGN_URL = VolleyInstance.getBaseUrl()
-            + "/engagments/assign/user/" + IdDetails + "/";
-
-        StringRequest stringRequest = new StringRequest(
-            Request.Method.DELETE, REMOVE_ASSIGN_URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                changeButton();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ErrorHandler.errorHandler(error, NoticeDetails.this);
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                return UserAuth.authorizationHeader(NoticeDetails.this);
-            }
-        };
-
-        VolleyInstance.getInstance(this).addToRequestQueue(stringRequest, "removeAssign");
     }
 
     /**
@@ -145,6 +77,11 @@ public class NoticeDetails extends AppCompatActivity {
                             city.setText(city_s);
                             description.setText(description_s);
                             created.setText(created_s);
+
+                            // Show assign buttons when notice do not belogns to currently logged user
+                            if (!owner_s.equals(UserAuth.getEmail(NoticeDetails.this))) {
+                                addFragment();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -161,85 +98,25 @@ public class NoticeDetails extends AppCompatActivity {
         VolleyInstance.getInstance(this).addToRequestQueue(jsonObjectRequest, "noticeDetails");
     }
 
-    private void checkAssign() {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-            Request.Method.GET, CHECK_ASSIGN_URL, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    if (response.getBoolean("is_assigned")) {
-                        assignButton.setVisibility(View.GONE);
-                        removeButton.setVisibility(View.VISIBLE);
-                    } else {
-                        assignButton.setVisibility(View.VISIBLE);
-                        removeButton.setVisibility(View.GONE);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ErrorHandler.errorHandler(error, NoticeDetails.this);
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                return UserAuth.authorizationHeader(NoticeDetails.this);
-            }
-        };
-
-        VolleyInstance.getInstance(this).addToRequestQueue(jsonObjectRequest, "checkAssign");
-    }
-
-    private JsonObjectRequest makeRequest(String URL, JSONObject data, int method) {
-        return new JsonObjectRequest(
-            method, URL, data, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                changeButton();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ErrorHandler.errorHandler(error, NoticeDetails.this);
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                return UserAuth.authorizationHeader(NoticeDetails.this);
-            }
-        };
+    /**
+     * Adds assign buttons to activity.
+     */
+    private void addFragment() {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment assignButtons = new AssignButtons();
+        assignButtons.setArguments(addBundle());
+        fragmentTransaction.replace(assignContent, assignButtons);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     /**
-     * Add current engagment id to request params.
-     * @return JSONObject with request params.
+     * Adds to fragment bundle with notice id.
+     * @return Returns bundle with notice id.
      */
-    private JSONObject addParam() {
-        CreateJson cj = new CreateJson();
-        cj.addStr("engagment", IdDetails);
-
-        try {
-            return cj.makeJSON();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    /**
-     * Change state of buttons.
-     */
-    private void changeButton() {
-        if (assignButton.getVisibility() == View.GONE) {
-            assignButton.setVisibility(View.VISIBLE);
-            removeButton.setVisibility(View.GONE);
-        } else {
-            assignButton.setVisibility(View.GONE);
-            removeButton.setVisibility(View.VISIBLE);
-        }
+    private Bundle addBundle() {
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", Integer.parseInt(IdDetails));
+        return bundle;
     }
 }
