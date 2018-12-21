@@ -19,6 +19,7 @@ import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.utils.CreateJson;
 import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 import com.example.teamyuml.decentworkmobile.views.UserPanel;
+import com.example.teamyuml.decentworkmobile.volley.ErrorHandler;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -139,7 +140,7 @@ public class SignInGoogle extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        System.out.println(error.networkResponse);
+                        ErrorHandler.errorHandler(error, getActivity());
                     }
                 });
 
