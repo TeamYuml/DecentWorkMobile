@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -40,7 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ListViewFragment extends Fragment {
+public class ListViewFragment extends Fragment implements AbsListView.OnScrollListener {
     private ArrayList<HashMap<String, String>> data;
     private ListView listView;
     private String URL;
@@ -50,6 +51,9 @@ public class ListViewFragment extends Fragment {
     private String initClass;
     private String packageName = "com.example.teamyuml.decentworkmobile.views";
     private ArrayAdapter<HashMap<String, String>> adapterClass;
+    private boolean reachedBottom = false;
+    private String hasNextPage = null;
+    private int currentPage = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,6 +77,7 @@ public class ListViewFragment extends Fragment {
 
         View v = inflater.inflate(listLayoutId, container, false);
         listView = v.findViewById(listViewId);
+        listView.setOnScrollListener(this);
         return v;
     }
 
@@ -121,6 +126,7 @@ public class ListViewFragment extends Fragment {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                    hasNextPage = response.getString("next");
                     JSONArray results = response.getJSONArray("results");
 
                     for (int i = 0; i < results.length(); i++) {
@@ -132,11 +138,15 @@ public class ListViewFragment extends Fragment {
                 }
 
                 if (data != null) {
-                    adapterClass = new CustomListView(getActivity(), data);
-                    initListView();
-                    Toast.makeText(getActivity(),
-                        "Pobrano " + data.size() + " ogłoszenia",
-                        Toast.LENGTH_LONG).show();
+                    if (currentPage == 1) {
+                        adapterClass = new CustomWorkerView(getActivity(), data);
+                        initListView();
+                        Toast.makeText(getActivity(),
+                            "Pobrano " + data.size() + " profili",
+                            Toast.LENGTH_LONG).show();
+                    } else {
+                        adapterClass.notifyDataSetChanged();
+                    }
                 }
             }
         }, new Response.ErrorListener() {
@@ -194,6 +204,7 @@ public class ListViewFragment extends Fragment {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                    hasNextPage = response.getString("next");
                     JSONArray results = response.getJSONArray("results");
 
                     for (int i = 0; i < results.length(); i++) {
@@ -215,11 +226,15 @@ public class ListViewFragment extends Fragment {
                 }
 
                 if (data != null) {
-                    adapterClass = new CustomWorkerView(getActivity(), data);
-                    initListView();
-                    Toast.makeText(getActivity(),
-                        "Pobrano " + data.size() + " profili",
-                        Toast.LENGTH_LONG).show();
+                    if (currentPage == 1) {
+                        adapterClass = new CustomWorkerView(getActivity(), data);
+                        initListView();
+                        Toast.makeText(getActivity(),
+                            "Pobrano " + data.size() + " profili",
+                            Toast.LENGTH_LONG).show();
+                    } else {
+                        adapterClass.notifyDataSetChanged();
+                    }
                 }
             }
 
@@ -241,5 +256,28 @@ public class ListViewFragment extends Fragment {
         oneNotice.put("title", notice.getString("title"));
         oneNotice.put("profession", notice.getString("profession"));
         data.add(oneNotice);
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (isScrollBottom(view, scrollState) && !reachedBottom && hasNextPage != null) {
+            try {
+                callMethod.invoke(this);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                Toast.makeText(
+                    getActivity() ,"Brak dostępu do metody.", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+    }
+
+    private boolean isScrollBottom(AbsListView view, int scrollState) {
+        return !view.canScrollList(View.SCROLL_AXIS_VERTICAL)
+            && scrollState == SCROLL_STATE_IDLE;
     }
 }
