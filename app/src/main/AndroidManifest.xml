@@ -20,7 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".views.NoticeList" />
+        <activity android:name=".views.NoticeList"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".views.Login"
             android:parentActivityName=".views.NoticeList" />
@@ -33,7 +34,8 @@
         <activity
             android:name=".views.UserPanel"
             android:parentActivityName=".views.NoticeList" />
-        <activity android:name=".views.EngagmentAdd"
+        <activity
+            android:name=".views.NoticeAdd"
             android:parentActivityName=".views.NoticeList" />
     </application>
 

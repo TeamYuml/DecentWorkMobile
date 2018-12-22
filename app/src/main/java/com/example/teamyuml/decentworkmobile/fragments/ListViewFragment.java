@@ -152,9 +152,7 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(),
-                    "Coś poszło nie tak",
-                    Toast.LENGTH_LONG).show();
+                ErrorHandler.errorHandler(error, getActivity());
             }
         });
 
@@ -241,9 +239,7 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(),
-                    "Coś poszło nie tak",
-                    Toast.LENGTH_LONG).show();
+                ErrorHandler.errorHandler(error, getActivity());
             }
         });
 

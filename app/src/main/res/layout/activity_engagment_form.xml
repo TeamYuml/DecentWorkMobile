@@ -6,38 +6,42 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/EngagmentTextViewTitle"
+        android:id="@+id/title_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Title"
+        android:text="@string/title"
         android:textSize="20sp"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="120dp" />
 
     <EditText
-        android:id="@+id/Engagment_Title"
+        android:id="@+id/title"
         android:layout_width="354dp"
         android:layout_height="wrap_content"
+        android:autoLink="none"
+        android:autoText="false"
+        android:autofillHints=""
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="text"
         android:text=""
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="161dp" />
 
     <TextView
-        android:id="@+id/EngagmentTextViewDescription"
+        android:id="@+id/description_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Description"
+        android:text="@string/description"
         android:textSize="20sp"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="245dp" />
 
     <EditText
-        android:id="@+id/Engagment_Description"
-        android:layout_width="wrap_content"
+        android:id="@+id/description"
+        android:layout_width="353dp"
         android:layout_height="wrap_content"
-        android:hint="More about your Engagment"
+        android:autofillHints=""
+        android:inputType="text"
         android:textSize="20sp"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="16dp"
@@ -47,36 +51,27 @@
         android:id="@+id/EngagmentTextViewCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="City"
+        android:text="@string/city"
         android:textSize="20sp"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="245dp" />
 
     <Spinner
-        android:id="@+id/Engagment_City"
+        android:id="@+id/city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="More about your engagment"
         android:textSize="20sp"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="272dp" />
 
     <Button
-        android:id="@+id/Engagment_Add"
+        android:id="@+id/add_notice_btn"
         android:layout_width="355dp"
         android:layout_height="wrap_content"
-        android:text="Sign your engagment"
+        android:text="@string/add_notice"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="357dp" />
 
-    <TextView
-        android:id="@+id/ErrorTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="20sp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="245dp" />
 </LinearLayout>

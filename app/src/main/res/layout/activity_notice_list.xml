@@ -21,10 +21,13 @@
             android:orientation="vertical"
             android:visibility="visible">
 
-            <Spinner
-                android:id="@+id/panel_spinner"
-                android:layout_width="fill_parent"
-                android:layout_height="40dp" />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                app:titleTextColor="@color/common_google_signin_btn_text_dark_default" />
 
             <FrameLayout
                 android:id="@+id/fragment_content"
