@@ -17,6 +17,7 @@ import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.fragments.AssignButtons;
 import com.example.teamyuml.decentworkmobile.utils.UserAuth;
+import com.example.teamyuml.decentworkmobile.volley.ErrorHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -89,9 +90,7 @@ public class NoticeDetails extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(NoticeDetails.this,
-                        "Coś poszło nie tak",
-                        Toast.LENGTH_LONG).show();
+                ErrorHandler.errorHandler(error, NoticeDetails.this);
                 }
             });
 

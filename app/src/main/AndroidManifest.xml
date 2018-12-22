@@ -34,6 +34,9 @@
         <activity
             android:name=".views.UserPanel"
             android:parentActivityName=".views.NoticeList" />
+        <activity
+            android:name=".views.NoticeAdd"
+            android:parentActivityName=".views.NoticeList" />
     </application>
 
 </manifest>

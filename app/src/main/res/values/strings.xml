@@ -14,6 +14,15 @@
     <string name="btn_assign">Zgłoś się</string>
     <string name="btn_remove_assign">Anuluj zgłoszenie</string>
 
+    <!-- Notice Add strings -->
+    <string name="title">Tytuł</string>
+    <string name="description">Opis</string>
+    <string name="title_hint">Dodaj tytuł(wymagane)</string>
+    <string name="description_hint">Dodaj opis</string>
+    <string name="city">Miasto</string>
+    <string name="add_notice">Dodaj ogłoszenie</string>
+    <!-- End strings -->
+
     <!-- Drawer menu strings -->
     <string name="menu_login">Logowanie</string>
     <string name="menu_logout">Wyloguj</string>

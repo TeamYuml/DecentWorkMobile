@@ -15,6 +15,7 @@ import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.utils.CreateJson;
 import com.example.teamyuml.decentworkmobile.utils.UserAuth;
+import com.example.teamyuml.decentworkmobile.volley.ErrorHandler;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import org.json.JSONException;
@@ -96,17 +97,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // TODO: ADD LABEL INSTEAD OF TOAST PROBABLY
-                    if (error.networkResponse.statusCode == 401) {
-                        Toast.makeText(Login.this,
-                            "Zły email lub hasło.", Toast.LENGTH_LONG).show();
-                    } else if (error.networkResponse.statusCode == 400){
-                        Toast.makeText(Login.this, "Dane są nie poprawne.",
-                            Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(Login.this, "Coś poszło nie tak.",
-                            Toast.LENGTH_LONG).show();
-                    }
+                    ErrorHandler.errorHandler(error, Login.this);
                 }
             });
 
