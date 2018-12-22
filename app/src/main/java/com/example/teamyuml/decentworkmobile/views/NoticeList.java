@@ -51,22 +51,13 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment notice = new ListViewFragment();
 
-        notice.setArguments(setParameters(
-            NOTICE_URL,
-            R.id.noticeList,
-            R.layout.notice_list_view,
-            "getNotice",
-            "NoticeDetails"
-        ));
-
+        initNoticeArgument(notice);
         initFragmentReplacer(notice);
-        drawerLayout.closeDrawers();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         adjustMenu(navigationView.getMenu());
     }
-
 
     private Bundle setParameters(String url, int listViewId, int listLayoutId, String methodName, String initClass) {
         Bundle parameters = new Bundle();
@@ -121,14 +112,7 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
                 drawerLayout.closeDrawers();
                 break;
             case R.id.noticeList:
-                notice.setArguments(setParameters(
-                    NOTICE_URL,
-                    R.id.noticeList,
-                    R.layout.notice_list_view,
-                    "getNotice",
-                    "NoticeDetails"
-                ));
-
+                initNoticeArgument(notice);
                 initFragmentReplacer(notice);
                 drawerLayout.closeDrawers();
                 break;
@@ -208,5 +192,16 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
         fragmentTransaction.replace(R.id.fragment_content, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    private void initNoticeArgument(Fragment fragmentList) {
+
+        fragmentList.setArguments(setParameters(
+            NOTICE_URL,
+            R.id.noticeList,
+            R.layout.notice_list_view,
+            "getNotice",
+            "NoticeDetails"
+        ));
     }
 }
