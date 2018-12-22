@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".views.NoticeList"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".views.Login"
             android:parentActivityName=".views.NoticeList" />

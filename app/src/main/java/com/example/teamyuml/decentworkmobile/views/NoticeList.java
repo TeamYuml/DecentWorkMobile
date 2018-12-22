@@ -31,7 +31,6 @@ import com.google.android.gms.tasks.Task;
 
 public class NoticeList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     FragmentManager fragmentManager;
-    Toolbar toolbar;
 
     private final String NOTICE_URL = VolleyInstance.getBaseUrl() + "/engagments/engagments/";
     private final String WORKER_URL = VolleyInstance.getBaseUrl() + "/profiles/userProfiles/";
@@ -44,15 +43,10 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_list);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
-
         fragmentManager = this.getSupportFragmentManager();
         drawerLayout = findViewById(R.id.drawer_layout);
+
+        initToolbar();
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment notice = new ListViewFragment();
@@ -65,9 +59,7 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
             "NoticeDetails"
         ));
 
-        fragmentTransaction.replace(R.id.fragment_content, notice);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        initFragmentReplacer(notice);
         drawerLayout.closeDrawers();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -94,12 +86,12 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment notice = new ListViewFragment();
 
         switch (menuItem.getItemId()) {
@@ -125,9 +117,7 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
                     "NoticeDetails"
                 ));
 
-                fragmentTransaction.replace(R.id.fragment_content, notice);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                initFragmentReplacer(notice);
                 drawerLayout.closeDrawers();
                 break;
             case R.id.noticeList:
@@ -139,9 +129,7 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
                     "NoticeDetails"
                 ));
 
-                fragmentTransaction.replace(R.id.fragment_content, notice);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                initFragmentReplacer(notice);
                 drawerLayout.closeDrawers();
                 break;
             case R.id.workerList:
@@ -155,9 +143,7 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
                     "WorkerDetails"
                 ));
 
-                fragmentTransaction.replace(R.id.fragment_content, worker);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                initFragmentReplacer(worker);
                 drawerLayout.closeDrawers();
         }
 
@@ -203,5 +189,24 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
             finish();
             startActivity(getIntent());
         }
+    }
+
+    /*
+     * Initialize toolbar properties
+     */
+    private void initToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+    }
+
+    private void initFragmentReplacer(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_content, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }
