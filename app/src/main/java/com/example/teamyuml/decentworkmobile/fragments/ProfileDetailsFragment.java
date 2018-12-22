@@ -17,6 +17,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.utils.UserAuth;
+import com.example.teamyuml.decentworkmobile.volley.ErrorHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -77,9 +78,7 @@ public class ProfileDetailsFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(),
-                        "Coś poszło nie tak",
-                        Toast.LENGTH_LONG).show();
+                ErrorHandler.errorHandler(error, getActivity());
             }
         });
 
