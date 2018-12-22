@@ -48,7 +48,6 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
 
         initToolbar();
 
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment notice = new ListViewFragment();
 
         initNoticeArgument(notice);
@@ -195,7 +194,6 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
     }
 
     private void initNoticeArgument(Fragment fragmentList) {
-
         fragmentList.setArguments(setParameters(
             NOTICE_URL,
             R.id.noticeList,
