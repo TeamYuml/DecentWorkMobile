@@ -86,6 +86,7 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
      * @param bundle - Bundle from {@link Fragment#getArguments()} method
      */
     private void initializeFragment(Bundle bundle) throws NoSuchMethodException {
+        System.out.println("X");
         URL = bundle.getString("url");
         listViewId = bundle.getInt("listViewId");
         listLayoutId = bundle.getInt("listLayoutId");
@@ -121,6 +122,8 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
     }
 
     private void getNotice() {
+        URL += "?page=" + currentPage;
+
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
             Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
@@ -139,14 +142,17 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
 
                 if (data != null) {
                     if (currentPage == 1) {
-                        adapterClass = new CustomWorkerView(getActivity(), data);
+                        adapterClass = new CustomListView(getActivity(), data);
                         initListView();
                         Toast.makeText(getActivity(),
-                            "Pobrano " + data.size() + " profili",
+                            "Pobrano " + data.size() + " ogłoszeń",
                             Toast.LENGTH_LONG).show();
                     } else {
                         adapterClass.notifyDataSetChanged();
                     }
+
+                    currentPage++;
+                    reachedBottom = false;
                 }
             }
         }, new Response.ErrorListener() {
@@ -197,6 +203,8 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
     }
 
     private void getWorkers() {
+        URL += "?page=" + currentPage;
+
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
             Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
@@ -233,6 +241,9 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
                     } else {
                         adapterClass.notifyDataSetChanged();
                     }
+
+                    currentPage++;
+                    reachedBottom = false;
                 }
             }
 
@@ -258,6 +269,7 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (isScrollBottom(view, scrollState) && !reachedBottom && hasNextPage != null) {
             try {
+                reachedBottom = true;
                 callMethod.invoke(this);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 Toast.makeText(
@@ -272,6 +284,12 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
 
     }
 
+    /**
+     * Check if scroll reached bottom.
+     * @param view
+     * @param scrollState
+     * @return
+     */
     private boolean isScrollBottom(AbsListView view, int scrollState) {
         return !view.canScrollList(View.SCROLL_AXIS_VERTICAL)
             && scrollState == SCROLL_STATE_IDLE;
