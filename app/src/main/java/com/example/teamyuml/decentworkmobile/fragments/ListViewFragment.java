@@ -52,7 +52,6 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
     private String packageName = "com.example.teamyuml.decentworkmobile.views";
     private ArrayAdapter<HashMap<String, String>> adapterClass;
     private boolean reachedBottom = false;
-    private String hasNextPage = null;
     private int currentPage = 1;
 
     @Override
@@ -86,7 +85,6 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
      * @param bundle - Bundle from {@link Fragment#getArguments()} method
      */
     private void initializeFragment(Bundle bundle) throws NoSuchMethodException {
-        System.out.println("X");
         URL = bundle.getString("url");
         listViewId = bundle.getInt("listViewId");
         listLayoutId = bundle.getInt("listLayoutId");
@@ -122,14 +120,12 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
     }
 
     private void getNotice() {
-        URL += "?page=" + currentPage;
-
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
             Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    hasNextPage = response.getString("next");
+                    URL = response.getString("next");
                     JSONArray results = response.getJSONArray("results");
 
                     for (int i = 0; i < results.length(); i++) {
@@ -203,14 +199,12 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
     }
 
     private void getWorkers() {
-        URL += "?page=" + currentPage;
-
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
             Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    hasNextPage = response.getString("next");
+                    URL = response.getString("next");
                     JSONArray results = response.getJSONArray("results");
 
                     for (int i = 0; i < results.length(); i++) {
@@ -267,7 +261,7 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (isScrollBottom(view, scrollState) && !reachedBottom && hasNextPage != null) {
+        if (isScrollBottom(view, scrollState) && !reachedBottom && URL != "null") {
             try {
                 reachedBottom = true;
                 callMethod.invoke(this);
