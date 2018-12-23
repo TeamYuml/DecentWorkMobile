@@ -38,6 +38,7 @@ public class ProfileDetailsFragment extends Fragment {
     private TextView description;
     private TextView phone;
     private String USER_URL = VolleyInstance.getBaseUrl() + "/profiles/userProfiles/";
+    private String USER_PROFESSION_URL = VolleyInstance.getBaseUrl() + "/profiles/withProfession/";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,10 +47,17 @@ public class ProfileDetailsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         View v = inflater.inflate(R.layout.fragment_profiles_details, container, false);
-        Serializable id = (UserAuth.getId(getActivity()) != 0) ?
-                           UserAuth.getId(getActivity()) :
-                           getActivity().getIntent().getStringExtra("choosenProfile");
-        USER_URL += id;
+        String id_profession_profile = getActivity().getIntent().getStringExtra("choosenProfile");
+        Serializable id;
+
+        if(id_profession_profile != null) {
+            id = id_profession_profile;
+            USER_PROFESSION_URL += id;
+        }else {
+            id = UserAuth.getId(getActivity());
+            USER_URL += id;
+        }
+
         name = v.findViewById(R.id.name);
         last_name = v.findViewById(R.id.last_name);
         city = v.findViewById(R.id.city);
