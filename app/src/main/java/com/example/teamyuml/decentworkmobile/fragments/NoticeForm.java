@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -19,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
+import com.example.teamyuml.decentworkmobile.database.DBHelper;
 import com.example.teamyuml.decentworkmobile.utils.CreateJson;
 import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 import com.example.teamyuml.decentworkmobile.volley.ErrorHandler;
@@ -40,6 +42,7 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
     private final String NOTICE_ADD_URL = VolleyInstance.getBaseUrl() + "/notices/notices/";
     private final String USER_NOTICES_URL = VolleyInstance.getBaseUrl() + "/notices/user/notices/";
     FragmentManager fragmentManager;
+    DBHelper myDatabase;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
         v.findViewById(R.id.add_notice_btn).setOnClickListener(this);
         setCitySpinner();
         fragmentManager = getActivity().getSupportFragmentManager();
+        myDatabase = new DBHelper(getActivity());
         return v;
     }
 
@@ -120,6 +124,17 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
             getActivity(), dropDownLayout, populateCities());
         arrayAdapter.setDropDownViewResource(dropDownLayout);
         noticeCity.setAdapter(arrayAdapter);
+        noticeCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                myDatabase.insertDataCity(parent.getItemAtPosition(position).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     /**
