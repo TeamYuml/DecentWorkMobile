@@ -33,7 +33,7 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
     FragmentManager fragmentManager;
 
     private final String NOTICE_URL = VolleyInstance.getBaseUrl() + "/engagments/engagments/";
-    private final String WORKER_URL = VolleyInstance.getBaseUrl() + "/profiles/userProfiles/";
+    private final String WORKER_URL = VolleyInstance.getBaseUrl() + "/profiles/withProfession/";
     private final String USER_NOTICES_URL = VolleyInstance.getBaseUrl() + "/engagments/user/engagments/";
 
     private DrawerLayout drawerLayout;
