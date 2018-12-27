@@ -45,4 +45,14 @@
     <string name="wrongJSON">Zły format odpowiedzi. Skontaktuj się z administratorem.</string>
     <string name="wrongData">Wpisane dane nie są poprawne</string>
     <!-- End Error Strings -->
+
+    <!-- notice details hints -->
+    <string name="title_input">Tytuł</string>
+    <string name="profession_input">Profesja</string>
+    <string name="owner_input">Twórca</string>
+    <string name="city_input">Miasto</string>
+    <string name="description_input">Opis</string>
+    <string name="created_input">Stworzone:</string>
+    <string name="edit_btn">Zapisz zmiany</string>
+    <!-- End notice details hints -->
 </resources>
