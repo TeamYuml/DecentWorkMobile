@@ -5,6 +5,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/*
+ * Class for creating database file
+ */
+
 public class DBHelper extends SQLiteOpenHelper {
 
     public static String db_Name = "DecentWorkMobile.db";
@@ -26,7 +30,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("create table " + professions_Table + " (" +
                 "ID_Profession INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "Name_Profession TEXT)");
-
     }
 
     @Override
@@ -36,6 +39,9 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /*
+     * Inserting datas to Cities Table
+     */
     public boolean insertDataCity(String Name_City) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues city_value = new ContentValues();
@@ -48,6 +54,10 @@ public class DBHelper extends SQLiteOpenHelper {
             return true;
         }
     }
+
+    /*
+     * Inserting datas to Profession Table
+     */
     public boolean insertDataProfession(String Name_Profession){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues profession_value = new ContentValues();
