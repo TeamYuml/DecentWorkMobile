@@ -3,6 +3,8 @@ package com.example.teamyuml.decentworkmobile.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,8 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
     private EditText noticeTitle;
     private EditText noticeDescription;
     private final String NOTICE_ADD_URL = VolleyInstance.getBaseUrl() + "/engagments/engagments/";
+    private final String USER_NOTICES_URL = VolleyInstance.getBaseUrl() + "/engagments/user/engagments/";
+    FragmentManager fragmentManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
         noticeDescription = v.findViewById(R.id.description);
         v.findViewById(R.id.add_notice_btn).setOnClickListener(this);
         setCitySpinner();
+        fragmentManager = getActivity().getSupportFragmentManager();
         return v;
     }
 
@@ -60,7 +65,17 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
                 Request.Method.POST, NOTICE_ADD_URL, addParams(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    //TODO ADD INTENT TO USER NOTICES
+                    Fragment notice = new ListViewFragment();
+
+                    notice.setArguments(setParameters(
+                        USER_NOTICES_URL,
+                        R.id.noticeList,
+                        R.layout.notice_list_view,
+                        "getUserNotice",
+                        "NoticeDetails"
+                    ));
+
+                    initFragmentReplacer(notice);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -118,5 +133,22 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
         cities.add("Wrocław");
 
         return cities;
+    }
+
+    private Bundle setParameters(String url, int listViewId, int listLayoutId, String methodName, String initClass) {
+        Bundle parameters = new Bundle();
+        parameters.putString("url", url);
+        parameters.putInt("listViewId", listViewId);
+        parameters.putInt("listLayoutId", listLayoutId);
+        parameters.putString("methodName", methodName);
+        parameters.putString("initClass", initClass);
+        return parameters;
+    }
+
+    private void initFragmentReplacer(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_content, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }
