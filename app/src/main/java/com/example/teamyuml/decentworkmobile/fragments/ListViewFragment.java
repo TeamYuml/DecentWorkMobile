@@ -122,72 +122,32 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
     private void getNotice() {
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
             Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    URL = response.getString("next");
-                    JSONArray results = response.getJSONArray("results");
-
-                    for (int i = 0; i < results.length(); i++) {
-                        JSONObject notice = results.getJSONObject(i);
-                        getNoticeResponse(notice);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                @Override
+                public void onResponse(JSONObject response) {
+                    processNoticeResponse(response);
                 }
-
-                if (data != null) {
-                    if (currentPage == 1) {
-                        adapterClass = new CustomListView(getActivity(), data);
-                        initListView();
-                        Toast.makeText(getActivity(),
-                            "Pobrano " + data.size() + " ogłoszeń",
-                            Toast.LENGTH_LONG).show();
-                    } else {
-                        adapterClass.notifyDataSetChanged();
-                    }
-
-                    currentPage++;
-                    reachedBottom = false;
-                }
-            }
         }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ErrorHandler.errorHandler(error, getActivity());
-            }
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    ErrorHandler.errorHandler(error, getActivity());
+                }
         });
 
         VolleyInstance.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, "Notice");
     }
 
     private void getUserNotice() {
-        final JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(
-                Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-                    for (int i = 0; i < response.length(); i++) {
-                        JSONObject notice = response.getJSONObject(i);
-                        getNoticeResponse(notice);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+            Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    processNoticeResponse(response);
                 }
-
-                if (data != null) {
-                    adapterClass = new CustomListView(getActivity(), data);
-                    initListView();
-                    Toast.makeText(getActivity(),
-                            "Pobrano " + data.size() + " ogłoszenia",
-                            Toast.LENGTH_LONG).show();
-                }
-            }
         }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ErrorHandler.errorHandler(error, getActivity());
-            }
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    ErrorHandler.errorHandler(error, getActivity());
+                }
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -201,51 +161,51 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
     private void getWorkers() {
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
             Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    URL = response.getString("next");
-                    JSONArray results = response.getJSONArray("results");
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        URL = response.getString("next");
+                        JSONArray results = response.getJSONArray("results");
 
-                    for (int i = 0; i < results.length(); i++) {
-                        JSONObject profile = results.getJSONObject(i);
-                        JSONObject user = profile.getJSONObject("user");
-                        String id = String.valueOf(user.getInt("id"));
-                        String name = user.getString("first_name");
-                        String last_name = user.getString("last_name");
-                        HashMap<String, String> oneWorker = new HashMap<>();
-                        oneWorker.put("id", id);
-                        oneWorker.put("name", name);
-                        oneWorker.put("lastName", last_name);
-                        oneWorker.put("city", profile.getString("city"));
-                        oneWorker.put("profession", profile.getString("professions"));
-                        data.add(oneWorker);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                if (data != null) {
-                    if (currentPage == 1) {
-                        adapterClass = new CustomWorkerView(getActivity(), data);
-                        initListView();
-                        Toast.makeText(getActivity(),
-                            "Pobrano " + data.size() + " profili",
-                            Toast.LENGTH_LONG).show();
-                    } else {
-                        adapterClass.notifyDataSetChanged();
+                        for (int i = 0; i < results.length(); i++) {
+                            JSONObject profile = results.getJSONObject(i);
+                            JSONObject user = profile.getJSONObject("user");
+                            String id = String.valueOf(user.getInt("id"));
+                            String name = user.getString("first_name");
+                            String last_name = user.getString("last_name");
+                            HashMap<String, String> oneWorker = new HashMap<>();
+                            oneWorker.put("id", id);
+                            oneWorker.put("name", name);
+                            oneWorker.put("lastName", last_name);
+                            oneWorker.put("city", profile.getString("city"));
+                            oneWorker.put("profession", profile.getString("professions"));
+                            data.add(oneWorker);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
 
-                    currentPage++;
-                    reachedBottom = false;
+                    if (data != null) {
+                        if (currentPage == 1) {
+                            adapterClass = new CustomWorkerView(getActivity(), data);
+                            initListView();
+                            Toast.makeText(getActivity(),
+                                "Pobrano " + data.size() + " profili",
+                                Toast.LENGTH_LONG).show();
+                        } else {
+                            adapterClass.notifyDataSetChanged();
+                        }
+
+                        currentPage++;
+                        reachedBottom = false;
+                    }
                 }
-            }
 
         }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ErrorHandler.errorHandler(error, getActivity());
-            }
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    ErrorHandler.errorHandler(error, getActivity());
+                }
         });
 
         VolleyInstance.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, "workers");
@@ -287,5 +247,34 @@ public class ListViewFragment extends Fragment implements AbsListView.OnScrollLi
     private boolean isScrollBottom(AbsListView view, int scrollState) {
         return !view.canScrollList(View.SCROLL_AXIS_VERTICAL)
             && scrollState == SCROLL_STATE_IDLE;
+    }
+
+    private void processNoticeResponse(JSONObject response) {
+        try {
+            URL = response.getString("next");
+            JSONArray results = response.getJSONArray("results");
+
+            for (int i = 0; i < results.length(); i++) {
+                JSONObject notice = results.getJSONObject(i);
+                getNoticeResponse(notice);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (data != null) {
+            if (currentPage == 1) {
+                adapterClass = new CustomListView(getActivity(), data);
+                initListView();
+                Toast.makeText(getActivity(),
+                    "Pobrano " + data.size() + " ogłoszeń",
+                    Toast.LENGTH_LONG).show();
+            } else {
+                adapterClass.notifyDataSetChanged();
+            }
+
+            currentPage++;
+            reachedBottom = false;
+        }
     }
 }
