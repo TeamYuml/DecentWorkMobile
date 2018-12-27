@@ -138,32 +138,32 @@ public class NoticeDetails extends AppCompatActivity {
     private void initializeListView() {
         final String ASSIGNED_NOTICE_URL = VolleyInstance.getBaseUrl() +
             "/engagments/assign/list/?engagment=" + IdDetails;
-        
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest (
-                Request.Method.GET, ASSIGNED_NOTICE_URL, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-                    for(int i=0; i<response.length(); i++) {
-                        JSONObject object = response.getJSONObject(i);
 
-                        user_list.add(
-                            new UserList(
-                                object.getString("email"),
-                                object.getInt("user")
-                            )
-                        );
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest (
+            Request.Method.GET, ASSIGNED_NOTICE_URL, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    try {
+                        for(int i=0; i<response.length(); i++) {
+                            JSONObject object = response.getJSONObject(i);
+
+                            user_list.add(
+                                new UserList(
+                                    object.getString("email"),
+                                    object.getInt("user")
+                                )
+                            );
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
         }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ErrorHandler.errorHandler(error, NoticeDetails.this);
-            }
-        });
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    ErrorHandler.errorHandler(error, NoticeDetails.this);
+                }
+            });
 
         VolleyInstance.getInstance(this).addToRequestQueue(jsonArrayRequest, "noticeDetails");
     }
