@@ -57,7 +57,7 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                    Request.Method.POST, NOTICE_ADD_URL, addParams(), new Response.Listener<JSONObject>() {
+                Request.Method.POST, NOTICE_ADD_URL, addParams(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     //TODO ADD INTENT TO USER NOTICES
@@ -102,7 +102,7 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
     private void setCitySpinner() {
         noticeCity = v.findViewById(R.id.city);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
-                getActivity(), dropDownLayout, populateCities());
+            getActivity(), dropDownLayout, populateCities());
         arrayAdapter.setDropDownViewResource(dropDownLayout);
         noticeCity.setAdapter(arrayAdapter);
     }
