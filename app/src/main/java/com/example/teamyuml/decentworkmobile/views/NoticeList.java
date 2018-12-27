@@ -34,9 +34,9 @@ import com.google.android.gms.tasks.Task;
 public class NoticeList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     FragmentManager fragmentManager;
 
-    private final String NOTICE_URL = VolleyInstance.getBaseUrl() + "/engagments/engagments/";
+    private final String NOTICE_URL = VolleyInstance.getBaseUrl() + "/notices/notices/";
     private final String WORKER_URL = VolleyInstance.getBaseUrl() + "/profiles/withProfession/";
-    private final String USER_NOTICES_URL = VolleyInstance.getBaseUrl() + "/engagments/user/engagments/";
+    private final String USER_NOTICES_URL = VolleyInstance.getBaseUrl() + "/notices/user/notices/";
 
     private DrawerLayout drawerLayout;
 

@@ -77,7 +77,7 @@ public class NoticeDetails extends AppCompatActivity {
     }
 
     private void getNoticeDetails() {
-        final String NOTICE_DETAIL_URL = VolleyInstance.getBaseUrl() + "/engagments/engagments/" + IdDetails + "/";
+        final String NOTICE_DETAIL_URL = VolleyInstance.getBaseUrl() + "/notices/notices/" + IdDetails + "/";
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest (
             Request.Method.GET, NOTICE_DETAIL_URL, null, new Response.Listener<JSONObject>() {
                 @Override
@@ -137,7 +137,7 @@ public class NoticeDetails extends AppCompatActivity {
 
     private void initializeListView() {
         final String ASSIGNED_NOTICE_URL = VolleyInstance.getBaseUrl() +
-            "/engagments/assign/list/?engagment=" + IdDetails;
+            "/notices/assign/list/?notice=" + IdDetails;
 
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest (
             Request.Method.GET, ASSIGNED_NOTICE_URL, null, new Response.Listener<JSONArray>() {
