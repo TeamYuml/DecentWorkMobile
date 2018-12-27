@@ -55,18 +55,18 @@ public class NoticeDetails extends AppCompatActivity {
         setContentView(R.layout.activity_notice_details);
         fragmentManager = this.getSupportFragmentManager();
         IdDetails = getIntent().getStringExtra("choosenProfile");
-        initializeTextViews();
+        initializeLayoutComponents();
         getNoticeDetails();
-        getAssignedUsers();
+        initializeListView();
         adapter = new ArrayAdapter<UserList>(this, R.layout.assigned_row_style, user_list);
         AssignedList.setAdapter(adapter);
         toAssignedUser();
     }
 
     /**
-     * Initialize text views.
+     * Initialize text views and list view for assigned users
      */
-    private void initializeTextViews() {
+    private void initializeLayoutComponents() {
         title = findViewById(R.id.title);
         profession = findViewById(R.id.profession);
         owner = findViewById(R.id.owner);
@@ -78,33 +78,31 @@ public class NoticeDetails extends AppCompatActivity {
 
     private void getNoticeDetails() {
         final String NOTICE_DETAIL_URL = VolleyInstance.getBaseUrl() + "/engagments/engagments/" + IdDetails + "/";
-
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest (
-                Request.Method.GET, NOTICE_DETAIL_URL, null, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String title_s = response.getString("title");
-                            String profession_s = response.getString("profession");
-                            String owner_s = response.getString("owner");
-                            String city_s = response.getString("city");
-                            String description_s = response.getString("description");
-                            String created_s = response.getString("created");
-                            title.setText(title_s);
-                            profession.setText(profession_s);
-                            owner.setText(owner_s);
-                            city.setText(city_s);
-                            description.setText(description_s);
-                            created.setText(created_s);
-
-                            // Show assign buttons when notice do not belogns to currently logged user
-                            if (!owner_s.equals(UserAuth.getEmail(NoticeDetails.this))) {
-                                addFragment();
-                            }
+            Request.Method.GET, NOTICE_DETAIL_URL, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        String title_s = response.getString("title");
+                        String profession_s = response.getString("profession");
+                        String owner_s = response.getString("owner");
+                        String city_s = response.getString("city");
+                        String description_s = response.getString("description");
+                        String created_s = response.getString("created");
+                        title.setText(title_s);
+                        profession.setText(profession_s);
+                        owner.setText(owner_s);
+                        city.setText(city_s);
+                        description.setText(description_s);
+                        created.setText(created_s);
+                        // Show assign buttons when notice do not belogns to currently logged user
+                        if (!owner_s.equals(UserAuth.getEmail(NoticeDetails.this))) {
+                            addFragment();
+                        }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }
                     }
+                }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -137,12 +135,14 @@ public class NoticeDetails extends AppCompatActivity {
         return bundle;
     }
 
-    private void getAssignedUsers() {
-        final String Assigned_NOTICE_URL = VolleyInstance.getBaseUrl() + "/engagments/assign/list/?engagment=" + IdDetails;
+    private void initializeListView() {
+        final String ASSIGNED_NOTICE_URL = VolleyInstance.getBaseUrl() +
+            "/engagments/assign/list/?engagment=" +
+            IdDetails;
 
 
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest (
-                Request.Method.GET, Assigned_NOTICE_URL, null, new Response.Listener<JSONArray>() {
+                Request.Method.GET, ASSIGNED_NOTICE_URL, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
@@ -156,7 +156,6 @@ public class NoticeDetails extends AppCompatActivity {
                                 )
                         );
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
