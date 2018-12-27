@@ -11,11 +11,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <fragment
+        <android.support.v7.widget.ContentFrameLayout
             android:id="@+id/profile_details"
-            android:name="com.example.teamyuml.decentworkmobile.fragments.ProfileDetailsFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+        </android.support.v7.widget.ContentFrameLayout>
 
         <Button
             android:id="@+id/edit_profile"

@@ -16,14 +16,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
-import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 import com.example.teamyuml.decentworkmobile.volley.ErrorHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +36,7 @@ public class ProfileDetailsFragment extends Fragment {
     private TextView description;
     private TextView phone;
     private String USER_URL = VolleyInstance.getBaseUrl() + "/profiles/userProfiles/";
-
+    private String packageName = "com.example.teamyuml.decentworkmobile.views";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,9 +44,9 @@ public class ProfileDetailsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         View v = inflater.inflate(R.layout.fragment_profiles_details, container, false);
-        Serializable id = (UserAuth.getId(getActivity()) != 0) ?
-                           UserAuth.getId(getActivity()) :
-                           getActivity().getIntent().getStringExtra("choosenProfile");
+
+        Bundle user_bundle = getArguments();
+        String id = user_bundle.getString("ID");
 
         USER_URL += id;
         name = v.findViewById(R.id.name);
