@@ -46,8 +46,8 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues city_value = new ContentValues();
         city_value.put(COL_1_CITY, Name_City);
-        long resulCity = db.insert(cities_Table, null, city_value);
-        if(resulCity == -1){
+        long resultCity = db.insert(cities_Table, null, city_value);
+        if(resultCity == -1){
             return false;
         }
         else {
@@ -62,8 +62,8 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues profession_value = new ContentValues();
         profession_value.put(COL_1_PROFESSION, Name_Profession);
-        long resulProfession = db.insert(professions_Table, null, profession_value);
-        if(resulProfession == -1){
+        long resultProfession = db.insert(professions_Table, null, profession_value);
+        if(resultProfession == -1){
             return false;
         }
         else {
