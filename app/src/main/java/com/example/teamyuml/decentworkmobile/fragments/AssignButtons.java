@@ -78,7 +78,7 @@ public class AssignButtons extends Fragment implements View.OnClickListener {
      * Assign user to currently displaying notice.
      */
     private void makeAssign() {
-        final String ASSIGN_URL = VolleyInstance.getBaseUrl() + "/engagments/assign/user/";
+        final String ASSIGN_URL = VolleyInstance.getBaseUrl() + "/notices/assign/user/";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
             Request.Method.POST, ASSIGN_URL, addParam(), new Response.Listener<JSONObject>() {
@@ -102,12 +102,12 @@ public class AssignButtons extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * Add current engagment id to request params.
+     * Add current notice id to request params.
      * @return JSONObject with request params.
      */
     private JSONObject addParam() {
         CreateJson cj = new CreateJson();
-        cj.addInt("engagment", id);
+        cj.addInt("notice", id);
 
         try {
             return cj.makeJSON();
@@ -123,7 +123,7 @@ public class AssignButtons extends Fragment implements View.OnClickListener {
      */
     private void removeAssign() {
         final String REMOVE_ASSIGN_URL = VolleyInstance.getBaseUrl()
-            + "/engagments/assign/user/" + id + "/";
+            + "/notices/assign/user/" + id + "/";
 
         StringRequest stringRequest = new StringRequest(
             Request.Method.DELETE, REMOVE_ASSIGN_URL, new Response.Listener<String>() {
@@ -151,7 +151,7 @@ public class AssignButtons extends Fragment implements View.OnClickListener {
      */
     private void checkAssign() {
         final String CHECK_ASSIGN_URL =
-            VolleyInstance.getBaseUrl() + "/engagments/assign/check/?engagment=" + id;
+            VolleyInstance.getBaseUrl() + "/notices/assign/check/?notices=" + id;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
             Request.Method.GET, CHECK_ASSIGN_URL, null, new Response.Listener<JSONObject>() {

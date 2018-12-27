@@ -37,8 +37,8 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
     private int dropDownLayout = android.R.layout.simple_dropdown_item_1line;
     private EditText noticeTitle;
     private EditText noticeDescription;
-    private final String NOTICE_ADD_URL = VolleyInstance.getBaseUrl() + "/engagments/engagments/";
-    private final String USER_NOTICES_URL = VolleyInstance.getBaseUrl() + "/engagments/user/engagments/";
+    private final String NOTICE_ADD_URL = VolleyInstance.getBaseUrl() + "/notices/notices/";
+    private final String USER_NOTICES_URL = VolleyInstance.getBaseUrl() + "/notices/user/notices/";
     FragmentManager fragmentManager;
 
     @Override
