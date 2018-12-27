@@ -6,10 +6,6 @@
             android:title="@string/menu_login" />
 
         <item
-            android:id="@+id/logout"
-            android:title="@string/menu_logout" />
-
-        <item
             android:id="@+id/userPanel"
             android:title="@string/menu_user_panel" />
 
@@ -18,11 +14,19 @@
             android:title="@string/menu_user_notices" />
 
         <item
+            android:id="@+id/addNotice"
+            android:title="@string/add_notice_menu"/>
+
+        <item
             android:id="@+id/noticeList"
             android:title="@string/menu_notice_list" />
 
         <item
             android:id="@+id/workerList"
             android:title="@string/menu_worker_list" />
+
+        <item
+            android:id="@+id/logout"
+            android:title="@string/menu_logout" />
     </group>
 </menu>
