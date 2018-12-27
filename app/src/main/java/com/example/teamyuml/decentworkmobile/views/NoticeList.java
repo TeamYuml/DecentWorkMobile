@@ -20,6 +20,7 @@ import com.example.teamyuml.decentworkmobile.BuildConfig;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.fragments.ListViewFragment;
+import com.example.teamyuml.decentworkmobile.fragments.NoticeForm;
 import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -128,6 +129,12 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
 
                 initFragmentReplacer(worker);
                 drawerLayout.closeDrawers();
+                break;
+            case R.id.addNotice:
+                Fragment addNotice = new NoticeForm();
+                initFragmentReplacer(addNotice);
+                drawerLayout.closeDrawers();
+                break;
         }
 
         return true;

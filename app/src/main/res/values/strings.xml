@@ -30,6 +30,7 @@
     <string name="menu_user_notices">Moje ogłoszenia</string>
     <string name="menu_notice_list">Ogłoszenia</string>
     <string name="menu_worker_list">Pracownicy</string>
+    <string name="add_notice_menu">Dodaj ogłoszenie</string>
     <!-- End drawer menu strings -->
 
     <string-array name="notice_list">
