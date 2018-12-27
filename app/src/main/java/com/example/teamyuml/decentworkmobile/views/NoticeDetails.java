@@ -137,8 +137,7 @@ public class NoticeDetails extends AppCompatActivity {
 
     private void initializeListView() {
         final String ASSIGNED_NOTICE_URL = VolleyInstance.getBaseUrl() +
-            "/engagments/assign/list/?engagment=" +
-            IdDetails;
+            "/engagments/assign/list/?engagment=" + IdDetails;
 
 
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest (
@@ -150,10 +149,10 @@ public class NoticeDetails extends AppCompatActivity {
                         JSONObject object = response.getJSONObject(i);
 
                         user_list.add(
-                                new UserList(
-                                        object.getString("email"),
-                                        object.getInt("user")
-                                )
+                            new UserList(
+                                object.getString("email"),
+                                object.getInt("user")
+                            )
                         );
                     }
                 } catch (JSONException e) {
