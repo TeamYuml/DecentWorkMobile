@@ -151,7 +151,7 @@ public class AssignButtons extends Fragment implements View.OnClickListener {
      */
     private void checkAssign() {
         final String CHECK_ASSIGN_URL =
-            VolleyInstance.getBaseUrl() + "/notices/assign/check/?notices=" + id;
+            VolleyInstance.getBaseUrl() + "/notices/assign/check/?notice=" + id;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
             Request.Method.GET, CHECK_ASSIGN_URL, null, new Response.Listener<JSONObject>() {

@@ -137,7 +137,7 @@ public class NoticeDetails extends AppCompatActivity {
 
     private void initializeListView() {
         final String ASSIGNED_NOTICE_URL = VolleyInstance.getBaseUrl() +
-            "/notices/assign/list/?notices=" + IdDetails;
+            "/notices/assign/list/?notice=" + IdDetails;
 
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest (
             Request.Method.GET, ASSIGNED_NOTICE_URL, null, new Response.Listener<JSONArray>() {
