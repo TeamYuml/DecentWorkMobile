@@ -46,9 +46,8 @@ public class ProfileDetailsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_profiles_details, container, false);
 
         Bundle user_bundle = getArguments();
-        String id = user_bundle.getString("ID");
 
-        USER_URL += id;
+        USER_URL += user_bundle.getString("ID");
         name = v.findViewById(R.id.name);
         last_name = v.findViewById(R.id.last_name);
         city = v.findViewById(R.id.city);

@@ -28,7 +28,6 @@ public class WorkerDetails extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = new Bundle();
         bundle.putString("ID", intent.getStringExtra("choosenProfile"));
-        System.out.println(bundle.getString("ID"));
         return bundle;
     }
 }
