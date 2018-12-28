@@ -2,72 +2,143 @@ package com.example.teamyuml.decentworkmobile.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.example.teamyuml.decentworkmobile.model.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-/*
- * Class for creating database file
+/**
+ * Class is responsible for creating copy of the database from asset file to
+ * memory of device
  */
-
 public class DBHelper extends SQLiteOpenHelper {
+    private static String DB_PATH = "/data/data/com.example.teamyuml.decentworkmobile/databases/";
+    private static String DB_NAME = "DecentWorkMobile.sqlite";
+    private SQLiteDatabase myDataBase;
+    private final Context myContext;
 
-    public static String db_Name = "DecentWorkMobile.db";
-    public static String cities_Table = "Cities";
-    public static String professions_Table = "Professions";
-    public static String COL_1_CITY = "Name_City";
-    public static String COL_1_PROFESSION = "Name_Profession";
-
+    /**
+     * Constructor
+     * Takes and keeps a reference of the passed context in order to access to the application assets and resources.
+     * @param context
+     */
     public DBHelper(Context context) {
-        super(context, db_Name, null, 1);
-        SQLiteDatabase db = this.getWritableDatabase();
+        super(context, DB_NAME, null, 1);
+        this.myContext = context;
+    }
+
+    /**
+     * Creates a empty database on the system and rewrites it with your own database.
+     * */
+    public void createDataBase() throws IOException{
+
+        boolean dbExist = checkDataBase();
+
+        if(dbExist){
+            //do nothing - database already exist
+        }
+        else {
+
+            //By calling this method and empty database will be created into the default system path
+            //of your application so we are gonna be able to overwrite that database with our database.
+            this.getReadableDatabase();
+
+            try {
+                copyDataBase();
+            }
+            catch (IOException e) {
+                throw new Error("Error copying database");
+            }
+        }
+    }
+
+    /**
+     * Check if the database already exist to avoid re-copying the file each time you open the application.
+     * @return true if it exists, false if it doesn't
+     */
+    private boolean checkDataBase(){
+        SQLiteDatabase checkDB = null;
+
+        try {
+            String myPath = DB_PATH + DB_NAME;
+            checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
+
+        }
+        catch(SQLiteException e){
+            //database does't exist yet.
+        }
+
+        if(checkDB != null) {
+
+            checkDB.close();
+
+        }
+
+        return checkDB != null ? true : false;
+    }
+
+    /**
+     * Copies your database from your local assets-folder to the just created empty database in the
+     * system folder, from where it can be accessed and handled.
+     * This is done by transfering bytestream.
+     * */
+    private void copyDataBase() throws IOException {
+
+        //Open your local db as the input stream
+        InputStream myInput = myContext.getAssets().open(DB_NAME);
+
+        // Path to the just created empty db
+        String outFileName = DB_PATH + DB_NAME;
+
+        //Open the empty db as the output stream
+        OutputStream myOutput = new FileOutputStream(outFileName);
+
+        //transfer bytes from the inputfile to the outputfile
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = myInput.read(buffer))>0){
+            myOutput.write(buffer, 0, length);
+        }
+        //Close the streams
+        myOutput.flush();
+        myOutput.close();
+        myInput.close();
+    }
+
+    public void openDataBase() throws SQLException {
+        //Open the database
+        String myPath = DB_PATH + DB_NAME;
+        myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+    }
+
+    @Override
+    public synchronized void close() {
+        if(myDataBase != null)
+            myDataBase.close();
+
+        super.close();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + cities_Table + " (" +
-                "ID_City INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "Name_City TEXT)");
-        db.execSQL("create table " + professions_Table + " (" +
-                "ID_Profession INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "Name_Profession TEXT)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + cities_Table );
-        db.execSQL("DROP TABLE IF EXISTS " + professions_Table );
-        onCreate(db);
     }
 
-    /*
-     * Inserting datas to Cities Table
-     */
-    public boolean insertDataCity(String Name_City) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues city_value = new ContentValues();
-        city_value.put(COL_1_CITY, Name_City);
-        long resultCity = db.insert(cities_Table, null, city_value);
-        if(resultCity == -1){
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-
-    /*
-     * Inserting datas to Profession Table
-     */
-    public boolean insertDataProfession(String Name_Profession){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues profession_value = new ContentValues();
-        profession_value.put(COL_1_PROFESSION, Name_Profession);
-        long resultProfession = db.insert(professions_Table, null, profession_value);
-        if(resultProfession == -1){
-            return false;
-        }
-        else {
-            return true;
-        }
+    //queries
+    public long addCity(NoticeCities cities) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("Name_City", cities.getName_City());
+        openDataBase();
+        long returnValue = myDataBase.insert("Cities", null, contentValues);
+        close();
+        return returnValue;
     }
 }
