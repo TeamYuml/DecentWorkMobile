@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -20,7 +22,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.fragments.AssignButtons;
+import com.example.teamyuml.decentworkmobile.fragments.ListViewFragment;
 import com.example.teamyuml.decentworkmobile.model.UserList;
+import com.example.teamyuml.decentworkmobile.utils.CreateJson;
 import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 import com.example.teamyuml.decentworkmobile.volley.ErrorHandler;
 
@@ -29,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import static com.example.teamyuml.decentworkmobile.R.layout.assigned_row_style;
 
@@ -47,6 +52,9 @@ public class NoticeDetails extends AppCompatActivity {
     private ArrayAdapter<UserList> adapter;
     private ListView AssignedList;
     private int assignContent = R.id.assign_buttons;
+    private Button deleteButton;
+    private String DELETE_URL = "/notices/notices/set_notice_done/?notice=";
+    private final String USER_NOTICES_URL = VolleyInstance.getBaseUrl() + "/notices/user/notices/";
     ArrayList<UserList> user_list = new ArrayList<>();
 
     @Override
@@ -74,6 +82,63 @@ public class NoticeDetails extends AppCompatActivity {
         description = findViewById(R.id.description);
         created = findViewById(R.id.created);
         AssignedList = findViewById(R.id.user_list);
+        deleteButton = findViewById(R.id.btn_delete);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                deleteNotice(v);
+            }
+        });
+    }
+
+    private void deleteNotice(View v) {
+        try {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.PUT, DELETE_URL+IdDetails, addParams(), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Fragment notice = new ListViewFragment();
+
+                    notice.setArguments(setParameters(
+                        USER_NOTICES_URL,
+                        R.id.noticeList,
+                        R.layout.notice_list_view,
+                        "getUserNotice",
+                        "NoticeDetails"
+                    ));
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    ErrorHandler.errorHandler(error, NoticeDetails.this);
+                }
+            }) {
+                public Map<String, String> getHeaders() {
+                    return UserAuth.authorizationHeader(NoticeDetails.this);
+                }
+            };
+
+            VolleyInstance.getInstance(NoticeDetails.this).addToRequestQueue(jsonObjectRequest, "Delete notice");
+        } catch (JSONException e) {
+            Toast.makeText(NoticeDetails.this, "Nie udało się usunąć ogłoszenia", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private JSONObject addParams() throws JSONException {
+
+        CreateJson cj = new CreateJson();
+        cj.addStr("is_done", "True");
+        return cj.makeJSON();
+    }
+
+    private Bundle setParameters(String url, int listViewId, int listLayoutId, String methodName, String initClass) {
+        Bundle parameters = new Bundle();
+        parameters.putString("url", url);
+        parameters.putInt("listViewId", listViewId);
+        parameters.putInt("listLayoutId", listLayoutId);
+        parameters.putString("methodName", methodName);
+        parameters.putString("initClass", initClass);
+        return parameters;
     }
 
     private void getNoticeDetails() {

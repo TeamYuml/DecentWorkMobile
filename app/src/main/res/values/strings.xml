@@ -13,6 +13,7 @@
     <string name="btn_link_login">Login</string>
     <string name="btn_assign">Zgłoś się</string>
     <string name="btn_remove_assign">Anuluj zgłoszenie</string>
+    <string name="btn_delete_assign">Usuń ogłoszenie</string>
 
     <!-- Notice Add strings -->
     <string name="title">Tytuł</string>
