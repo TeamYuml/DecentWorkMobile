@@ -1,5 +1,6 @@
 package com.example.teamyuml.decentworkmobile.fragments;
 
+import android.database.SQLException;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -8,7 +9,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -28,6 +28,7 @@ import com.example.teamyuml.decentworkmobile.volley.ErrorHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +60,26 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
         setCitySpinner();
         fragmentManager = getActivity().getSupportFragmentManager();
         myDatabase = new DBHelper(getActivity());
+        try {
+            myDatabase.createDataBase();
+        }
+        catch (IOException ioe) {
+            throw new Error("Unable to create database");
+        }
+
+        try {
+            myDatabase.openDataBase();
+        }
+        catch(SQLException sqle){
+            throw sqle;
+        }
+
         return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -124,17 +144,6 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
             getActivity(), dropDownLayout, populateCities());
         arrayAdapter.setDropDownViewResource(dropDownLayout);
         noticeCity.setAdapter(arrayAdapter);
-        noticeCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                myDatabase.insertDataCity(parent.getItemAtPosition(position).toString());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     /**

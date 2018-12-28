@@ -1,8 +1,17 @@
 package com.example.teamyuml.decentworkmobile.model;
 
+/*
+ * Model class for City datas
+ *
+ */
 public class NoticeCities {
     public int ID_City;
     public String Name_City;
+
+    public NoticeCities(int ID_City, String selected_city) {
+        this.ID_City = ID_City;
+        this.Name_City = selected_city;
+    }
 
     public int getID_City() {
         return ID_City;
