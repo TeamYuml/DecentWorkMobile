@@ -13,6 +13,7 @@
     <string name="btn_link_login">Login</string>
     <string name="btn_assign">Zgłoś się</string>
     <string name="btn_remove_assign">Anuluj zgłoszenie</string>
+    <string name="btn_edit">Edytuj zgłoszenie</string>
 
     <!-- Notice Add strings -->
     <string name="title">Tytuł</string>
@@ -53,6 +54,7 @@
     <string name="city_input">Miasto</string>
     <string name="description_input">Opis</string>
     <string name="created_input">Stworzone:</string>
-    <string name="edit_btn">Zapisz zmiany</string>
+    <string name="save_btn">Zapisz zmiany</string>
     <!-- End notice details hints -->
-</resources>
+
+    </resources>

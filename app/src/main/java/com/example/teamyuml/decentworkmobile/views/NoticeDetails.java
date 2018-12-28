@@ -6,9 +6,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -42,11 +44,11 @@ public class NoticeDetails extends AppCompatActivity {
     private TextView city;
     private TextView description;
     private TextView created;
-    private TextView user;
     private FragmentManager fragmentManager;
     private ArrayAdapter<UserList> adapter;
     private ListView AssignedList;
     private int assignContent = R.id.assign_buttons;
+    private Button edit_btn;
     ArrayList<UserList> user_list = new ArrayList<>();
 
     @Override
@@ -74,6 +76,12 @@ public class NoticeDetails extends AppCompatActivity {
         description = findViewById(R.id.description);
         created = findViewById(R.id.created);
         AssignedList = findViewById(R.id.user_list);
+        edit_btn = findViewById(R.id.edit_btn);
+        edit_btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                toEditNotice(v);
+            }
+        });
     }
 
     private void getNoticeDetails() {
@@ -98,6 +106,9 @@ public class NoticeDetails extends AppCompatActivity {
                         // Show assign buttons when notice do not belogns to currently logged user
                         if (!owner_s.equals(UserAuth.getEmail(NoticeDetails.this))) {
                             addFragment();
+                            edit_btn.setVisibility(View.GONE);
+                        } else {
+                            edit_btn.setVisibility(View.VISIBLE);
                         }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -177,5 +188,21 @@ public class NoticeDetails extends AppCompatActivity {
                 startActivity(toWorker);
             }
         });
+    }
+
+    private void toEditNotice(View v){
+        Intent toEditNotice = new Intent(this, EditNotice.class);
+        toEditNotice.putExtra("choosenProfile", IdDetails);
+        startActivity(toEditNotice);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

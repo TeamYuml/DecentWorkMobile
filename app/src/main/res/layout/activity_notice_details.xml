@@ -9,56 +9,48 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputEditText
+            <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/title_input"
-                android:textSize="12sp" />
+                android:text="TextView" />
 
-            <android.support.design.widget.TextInputEditText
+            <TextView
                 android:id="@+id/profession"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/profession_input"
-                android:textSize="12sp" />
+                android:text="TextView" />
 
-            <android.support.design.widget.TextInputEditText
+            <TextView
                 android:id="@+id/owner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/owner_input"
-                android:textSize="12sp" />
+                android:text="TextView" />
 
-            <android.support.design.widget.TextInputEditText
+            <TextView
                 android:id="@+id/city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/city_input"
-                android:textSize="12sp" />
+                android:text="TextView" />
 
-            <android.support.design.widget.TextInputEditText
+            <TextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/description_input"
-                android:textSize="12sp" />
+                android:text="TextView" />
 
-            <android.support.design.widget.TextInputEditText
+            <TextView
                 android:id="@+id/created"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/created_input"
-                android:textSize="12sp" />
+                android:text="TextView" />
 
             <FrameLayout
                 android:id="@+id/assign_buttons"
@@ -73,22 +65,18 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <Button
+                android:id="@+id/edit_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_edit" />
+
             <ListView
                 android:id="@+id/user_list"
                 android:layout_width="match_parent"
-                android:layout_height="253dp" />
+                android:layout_height="match_parent" >
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/edit_btn" />
-            </LinearLayout>
+            </ListView>
         </LinearLayout>
 
     </LinearLayout>
