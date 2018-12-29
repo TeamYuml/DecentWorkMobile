@@ -1,6 +1,7 @@
 package com.example.teamyuml.decentworkmobile.views;
 
 import android.content.Intent;
+import android.database.SQLException;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import com.example.teamyuml.decentworkmobile.BuildConfig;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
+import com.example.teamyuml.decentworkmobile.database.DBHelper;
 import com.example.teamyuml.decentworkmobile.fragments.ListViewFragment;
 import com.example.teamyuml.decentworkmobile.fragments.NoticeForm;
 import com.example.teamyuml.decentworkmobile.utils.UserAuth;
@@ -30,6 +32,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.IOException;
+
 
 public class NoticeList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     FragmentManager fragmentManager;
@@ -39,6 +43,8 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
     private final String USER_NOTICES_URL = VolleyInstance.getBaseUrl() + "/notices/user/notices/";
 
     private DrawerLayout drawerLayout;
+
+    DBHelper myDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +64,19 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         adjustMenu(navigationView.getMenu());
+        myDatabase = new DBHelper(this);
+        try {
+            myDatabase.createDataBase();
+        }
+        catch (IOException ioe) {
+            throw new Error("Unable to create database");
+        }
+
+        try {
+            myDatabase.openDataBase();
+        } catch(SQLException sqle){
+            throw sqle;
+        }
     }
 
     private Bundle setParameters(String url, int listViewId, int listLayoutId, String methodName, String initClass) {

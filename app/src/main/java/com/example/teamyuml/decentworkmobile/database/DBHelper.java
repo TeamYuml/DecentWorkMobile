@@ -35,14 +35,9 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * Creates a empty database on the system and rewrites it with your own database.
      * */
-    public void createDataBase() throws IOException{
+    public void createDataBase() throws IOException {
 
-        boolean dbExist = checkDataBase();
-
-        if(dbExist){
-            //do nothing - database already exist
-        }
-        else {
+       if(!checkDataBase()) {
 
             //By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
@@ -50,8 +45,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             try {
                 copyDataBase();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 throw new Error("Error copying database");
             }
         }
@@ -67,19 +61,19 @@ public class DBHelper extends SQLiteOpenHelper {
         try {
             String myPath = DB_PATH + DB_NAME;
             checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
-
-        }
-        catch(SQLiteException e){
+        } catch(SQLiteException e){
             //database does't exist yet.
         }
 
         if(checkDB != null) {
-
             checkDB.close();
-
         }
 
-        return checkDB != null ? true : false;
+        if(checkDB != null){
+            checkDB.close();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -88,7 +82,6 @@ public class DBHelper extends SQLiteOpenHelper {
      * This is done by transfering bytestream.
      * */
     private void copyDataBase() throws IOException {
-
         //Open your local db as the input stream
         InputStream myInput = myContext.getAssets().open(DB_NAME);
 
@@ -101,9 +94,11 @@ public class DBHelper extends SQLiteOpenHelper {
         //transfer bytes from the inputfile to the outputfile
         byte[] buffer = new byte[1024];
         int length;
-        while ((length = myInput.read(buffer))>0){
+
+        while ((length = myInput.read(buffer))>0) {
             myOutput.write(buffer, 0, length);
         }
+
         //Close the streams
         myOutput.flush();
         myOutput.close();
@@ -118,8 +113,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public synchronized void close() {
-        if(myDataBase != null)
+        if(myDataBase != null) {
             myDataBase.close();
+        }
 
         super.close();
     }
@@ -132,13 +128,4 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
-    //queries
-    public long addCity(NoticeCities cities) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("Name_City", cities.getName_City());
-        openDataBase();
-        long returnValue = myDataBase.insert("Cities", null, contentValues);
-        close();
-        return returnValue;
-    }
 }

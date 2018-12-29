@@ -1,6 +1,6 @@
 package com.example.teamyuml.decentworkmobile.model;
 
-public class NoticeProfessions {
+public class Professions {
     public int ID_profession;
     public String Name_profession;
 

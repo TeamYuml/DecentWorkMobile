@@ -59,20 +59,6 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
         v.findViewById(R.id.add_notice_btn).setOnClickListener(this);
         setCitySpinner();
         fragmentManager = getActivity().getSupportFragmentManager();
-        myDatabase = new DBHelper(getActivity());
-        try {
-            myDatabase.createDataBase();
-        }
-        catch (IOException ioe) {
-            throw new Error("Unable to create database");
-        }
-
-        try {
-            myDatabase.openDataBase();
-        }
-        catch(SQLException sqle){
-            throw sqle;
-        }
 
         return v;
     }
