@@ -216,4 +216,5 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
 
         initFragmentReplacer(notice);
     }
+
 }
