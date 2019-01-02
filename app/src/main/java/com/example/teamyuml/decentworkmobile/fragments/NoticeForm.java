@@ -42,7 +42,7 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
     private EditText noticeCity;
     private final String NOTICE_ADD_URL = VolleyInstance.getBaseUrl() + "/notices/notices/";
     private final String USER_NOTICES_URL = VolleyInstance.getBaseUrl() + "/notices/user/notices/";
-    private final String EDIT_NOTICE_URL = VolleyInstance.getBaseUrl() +"//";
+    private final String EDIT_NOTICE_URL = VolleyInstance.getBaseUrl() +"/notices/notices/";
     private String RESPONSE_URL = null;
     private int requestMethod;
     FragmentManager fragmentManager;
@@ -56,7 +56,7 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Bundle initClass = getArguments();
+
 
         v = inflater.inflate(R.layout.notice_form, container, false);
         noticeTitle = v.findViewById(R.id.title);
@@ -78,14 +78,16 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
         RESPONSE_URL = NOTICE_ADD_URL;
         requestMethod = Request.Method.POST;
 
-        if (initClass != null) {
-            noticeTitle.setText(initClass.getString("title"));
-            noticeDescription.setText(initClass.getString("description"));
-            noticeProfession.setText(initClass.getString("profession"));
-            noticeCity.setText(initClass.getString("city"));
+        Bundle fields = getArguments();
+
+        if (fields != null) {
+            noticeTitle.setText(fields.getString("title"));
+            noticeDescription.setText(fields.getString("description"));
+            noticeProfession.setText(fields.getString("profession"));
+            noticeCity.setText(fields.getString("city"));
 
             cancel_btn.setVisibility(View.VISIBLE);
-            RESPONSE_URL = EDIT_NOTICE_URL;
+            RESPONSE_URL = EDIT_NOTICE_URL + getArguments().getInt("id");
             requestMethod = Request.Method.PUT;
         }
 

@@ -62,13 +62,8 @@ public class DetailsFragment extends Fragment {
         v = inflater.inflate(R.layout.notice_details, container, false);
         fragmentManager = getActivity().getSupportFragmentManager();
 
-        title = v.findViewById(R.id.title);
-        profession = v.findViewById(R.id.profession);
-        owner = v.findViewById(R.id.owner);
-        city = v.findViewById(R.id.city);
-        description = v.findViewById(R.id.description);
-        created = v.findViewById(R.id.created);
-        edit_btn = v.findViewById(R.id.edit_btn);
+        initializeComponents(v);
+
         edit_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 toEditNotice(v);
@@ -76,13 +71,11 @@ public class DetailsFragment extends Fragment {
         });
         edit_btn.setVisibility(View.GONE);
 
-        Bundle get_ID = getArguments();
-        IdDetails = get_ID.getInt("id");
+        IdDetails = getArguments().getInt("id");
 
         getNoticeDetails();
         initializeListView();
 
-        AssignedList = v.findViewById(R.id.user_list);
         adapter = new ArrayAdapter<UserList>(getActivity(), R.layout.assigned_row_style, user_list);
         AssignedList.setAdapter(adapter);
 
@@ -91,8 +84,20 @@ public class DetailsFragment extends Fragment {
         return v;
     }
 
+    private void initializeComponents(View v) {
+        title = v.findViewById(R.id.title);
+        profession = v.findViewById(R.id.profession);
+        owner = v.findViewById(R.id.owner);
+        city = v.findViewById(R.id.city);
+        description = v.findViewById(R.id.description);
+        created = v.findViewById(R.id.created);
+        edit_btn = v.findViewById(R.id.edit_btn);
+        AssignedList = v.findViewById(R.id.user_list);
+    }
+
     private void getNoticeDetails() {
-        final String NOTICE_DETAIL_URL = VolleyInstance.getBaseUrl() + "/notices/notices/" + IdDetails + "/";
+        final String NOTICE_DETAIL_URL =
+            VolleyInstance.getBaseUrl() + "/notices/notices/" + IdDetails + "/";
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest (
             Request.Method.GET, NOTICE_DETAIL_URL, null, new Response.Listener<JSONObject>() {
             @Override
@@ -110,6 +115,7 @@ public class DetailsFragment extends Fragment {
                     city.setText(city_s);
                     description.setText(description_s);
                     created.setText(created_s);
+
                     // Show assign buttons when notice do not belogns to currently logged user
                     if (!owner_s.equals(UserAuth.getEmail(getActivity()))) {
                         addFragment();
@@ -174,10 +180,13 @@ public class DetailsFragment extends Fragment {
         });
     }
 
+    /**
+     * Adds assign buttons to activity.
+     */
     private void addFragment() {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment assignButtons = new AssignButtons();
-        assignButtons.setArguments(noticeID());
+        assignButtons.setArguments(prepareBundle());
         fragmentTransaction.replace(assignContent, assignButtons);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -186,13 +195,17 @@ public class DetailsFragment extends Fragment {
     private void toEditNotice(View v) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment noticeForm = new NoticeForm();
-        noticeForm.setArguments(noticeID());
+        noticeForm.setArguments(prepareBundle());
         fragmentTransaction.replace(R.id.fragment_content, noticeForm);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
-    private Bundle noticeID() {
+    /**
+     * Adds to fragment bundle with notice data.
+     * @return Returns bundle with notice data.
+     */
+    private Bundle prepareBundle() {
         Bundle bundle = new Bundle();
         bundle.putInt("id", IdDetails);
         bundle.putString("initClass", "DetailsFragment");
