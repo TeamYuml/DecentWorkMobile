@@ -1,5 +1,6 @@
 package com.example.teamyuml.decentworkmobile.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -32,14 +34,19 @@ import java.util.Map;
 
 public class NoticeForm extends Fragment implements View.OnClickListener {
 
-    private Spinner noticeCity;
     private View v;
     private int dropDownLayout = android.R.layout.simple_dropdown_item_1line;
     private EditText noticeTitle;
     private EditText noticeDescription;
+    private EditText noticeProfession;
+    private EditText noticeCity;
     private final String NOTICE_ADD_URL = VolleyInstance.getBaseUrl() + "/notices/notices/";
     private final String USER_NOTICES_URL = VolleyInstance.getBaseUrl() + "/notices/user/notices/";
+    private final String EDIT_NOTICE_URL = VolleyInstance.getBaseUrl() +"/notices/notices/";
+    private String RESPONSE_URL = null;
+    private int requestMethod;
     FragmentManager fragmentManager;
+    private Button cancel_btn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,20 +56,63 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         v = inflater.inflate(R.layout.notice_form, container, false);
         noticeTitle = v.findViewById(R.id.title);
         noticeDescription = v.findViewById(R.id.description);
-        v.findViewById(R.id.add_notice_btn).setOnClickListener(this);
-        setCitySpinner();
+        noticeProfession = v.findViewById(R.id.profession);
+        noticeCity = v.findViewById(R.id.city);
         fragmentManager = getActivity().getSupportFragmentManager();
+
+        v.findViewById(R.id.add_notice_btn).setOnClickListener(this);
+        cancel_btn = v.findViewById(R.id.cancel_btn);
+        cancel_btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                backToList(v);
+            }
+        });
+
+        cancel_btn.setVisibility(View.GONE);
+
+        RESPONSE_URL = NOTICE_ADD_URL;
+        requestMethod = Request.Method.POST;
+
+        Bundle fields = getArguments();
+
+        if (fields != null) {
+            noticeTitle.setText(fields.getString("title"));
+            noticeDescription.setText(fields.getString("description"));
+            noticeProfession.setText(fields.getString("profession"));
+            noticeCity.setText(fields.getString("city"));
+
+            cancel_btn.setVisibility(View.VISIBLE);
+            RESPONSE_URL = EDIT_NOTICE_URL + getArguments().getInt("id");
+            requestMethod = Request.Method.PUT;
+        }
+
         return v;
+    }
+
+    private void backToList(View v) {
+        Fragment notice = new ListViewFragment();
+
+        notice.setArguments(setParameters(
+            NOTICE_ADD_URL,
+            R.id.noticeList,
+            R.layout.notice_list_view,
+            "getNotice",
+            "NoticeDetails"
+        ));
+
+        initFragmentReplacer(notice);
     }
 
     @Override
     public void onClick(View v) {
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST, NOTICE_ADD_URL, addParams(), new Response.Listener<JSONObject>() {
+                requestMethod, RESPONSE_URL, addParams(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Fragment notice = new ListViewFragment();
@@ -101,39 +151,18 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
     private JSONObject addParams() throws JSONException {
         String title = noticeTitle.getText().toString();
         String description = noticeDescription.getText().toString();
-        String city = noticeCity.getSelectedItem().toString();
+        String city = noticeCity.getText().toString();
+        String profession = noticeProfession.getText().toString();
 
         CreateJson cj = new CreateJson();
         cj.addStr("city", city);
         cj.addStr("title" , title);
         cj.addStr("description", description);
+        cj.addStr("profession", profession);
 
         return cj.makeJSON();
     }
 
-    /**
-     * Initializes spinner with cities.
-     */
-    private void setCitySpinner() {
-        noticeCity = v.findViewById(R.id.city);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
-            getActivity(), dropDownLayout, populateCities());
-        arrayAdapter.setDropDownViewResource(dropDownLayout);
-        noticeCity.setAdapter(arrayAdapter);
-    }
-
-    /**
-     * Populates cities list.
-     * @return List of Strings with cities names.
-     */
-    private List<String> populateCities() {
-        List<String> cities = new ArrayList<>();
-        cities.add("Łódź");
-        cities.add("Poznań");
-        cities.add("Wrocław");
-
-        return cities;
-    }
 
     private Bundle setParameters(String url, int listViewId, int listLayoutId, String methodName, String initClass) {
         Bundle parameters = new Bundle();
@@ -151,4 +180,5 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
 }
