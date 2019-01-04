@@ -20,7 +20,9 @@
     <string name="title_hint">Dodaj tytuł(wymagane)</string>
     <string name="description_hint">Dodaj opis</string>
     <string name="city">Miasto</string>
+    <string name="profession">Profesja</string>
     <string name="add_notice">Dodaj ogłoszenie</string>
+    <string name="cancel">Anuluj</string>
     <!-- End strings -->
 
     <!-- Drawer menu strings -->
