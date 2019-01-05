@@ -87,7 +87,7 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
             noticeCity.setText(fields.getString("city"));
 
             cancel_btn.setVisibility(View.VISIBLE);
-            RESPONSE_URL = EDIT_NOTICE_URL + getArguments().getInt("id");
+            RESPONSE_URL = EDIT_NOTICE_URL + getArguments().getInt("id") + "/";
             requestMethod = Request.Method.PUT;
         }
 
