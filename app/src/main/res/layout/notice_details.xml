@@ -62,7 +62,13 @@
                 android:id="@+id/edit_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Edytuj ogłoszenie" />
+                android:text="@string/edit_notice" />
+
+            <Button
+                android:id="@+id/delete_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/delete_notice" />
 
             <ListView
                 android:id="@+id/user_list"
