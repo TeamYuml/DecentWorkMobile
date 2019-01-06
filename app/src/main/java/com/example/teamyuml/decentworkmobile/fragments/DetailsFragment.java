@@ -15,25 +15,31 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.model.UserList;
+import com.example.teamyuml.decentworkmobile.utils.CreateJson;
 import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 import com.example.teamyuml.decentworkmobile.views.NoticeDetails;
+import com.example.teamyuml.decentworkmobile.views.NoticeList;
 import com.example.teamyuml.decentworkmobile.views.WorkerDetails;
 import com.example.teamyuml.decentworkmobile.volley.ErrorHandler;
+import com.google.android.gms.common.api.UnsupportedApiCallException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class DetailsFragment extends Fragment {
     private View v;
@@ -50,6 +56,7 @@ public class DetailsFragment extends Fragment {
     private FragmentManager fragmentManager;
     private int assignContent = R.id.assign_buttons;
     private Button edit_btn;
+    private Button delete_btn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +77,13 @@ public class DetailsFragment extends Fragment {
             }
         });
         edit_btn.setVisibility(View.GONE);
+
+        delete_btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                deleteNotice();
+            }
+        });
+        delete_btn.setVisibility(View.GONE);
 
         IdDetails = getArguments().getInt("id");
 
@@ -92,6 +106,7 @@ public class DetailsFragment extends Fragment {
         description = v.findViewById(R.id.description);
         created = v.findViewById(R.id.created);
         edit_btn = v.findViewById(R.id.edit_btn);
+        delete_btn = v.findViewById(R.id.delete_btn);
         AssignedList = v.findViewById(R.id.user_list);
     }
 
@@ -121,6 +136,7 @@ public class DetailsFragment extends Fragment {
                         addFragment();
                     } else {
                         edit_btn.setVisibility(View.VISIBLE);
+                        delete_btn.setVisibility(View.VISIBLE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -134,6 +150,35 @@ public class DetailsFragment extends Fragment {
         });
 
         VolleyInstance.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, "noticeDetails");
+    }
+
+    private void deleteNotice() {
+        try {
+            StringRequest stringRequest = new StringRequest(
+                Request.Method.POST, VolleyInstance.getBaseUrl() + "/notices/notices/" +
+                IdDetails + "/set_notice_done/", new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String response) {
+                    Intent toNoticeList = new Intent(getActivity(), NoticeList.class);
+                    getActivity().startActivity(toNoticeList);
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    ErrorHandler.errorHandler(error, getActivity());
+                }
+            }) {
+                public Map<String, String> getHeaders() {
+                    return UserAuth.authorizationHeader(getActivity());
+                }
+            };
+
+            VolleyInstance.getInstance(getActivity()).addToRequestQueue(stringRequest, "Delete notice");
+        } catch (UnsupportedApiCallException a) {
+            Toast.makeText(getActivity(), "Nie udało się usunąć ogłoszenia", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void initializeListView() {

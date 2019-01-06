@@ -22,6 +22,8 @@
     <string name="city">Miasto</string>
     <string name="Profession">Profesja</string>
     <string name="add_notice">Dodaj ogłoszenie</string>
+    <string name="delete_notice">Usuń ogłoszenie</string>
+    <string name="edit_notice">Edytuj ogłoszenie</string>
     <!-- End strings -->
 
     <!-- Drawer menu strings -->
