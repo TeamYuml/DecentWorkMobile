@@ -181,12 +181,6 @@ public class DetailsFragment extends Fragment {
         }
     }
 
-    private JSONObject addParams() throws JSONException {
-
-        CreateJson cj = new CreateJson();
-        return cj.makeJSON();
-    }
-
     private void initializeListView() {
         final String ASSIGNED_NOTICE_URL = VolleyInstance.getBaseUrl() +
             "/notices/assign/list/?notice=" + IdDetails;
