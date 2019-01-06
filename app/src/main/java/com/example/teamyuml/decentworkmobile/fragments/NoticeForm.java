@@ -1,6 +1,7 @@
 package com.example.teamyuml.decentworkmobile.fragments;
 
 import android.content.Intent;
+import android.database.SQLException;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
+import com.example.teamyuml.decentworkmobile.database.DBHelper;
 import com.example.teamyuml.decentworkmobile.utils.CreateJson;
 import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 import com.example.teamyuml.decentworkmobile.volley.ErrorHandler;
@@ -28,6 +30,7 @@ import com.example.teamyuml.decentworkmobile.volley.ErrorHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +50,7 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
     private int requestMethod;
     FragmentManager fragmentManager;
     private Button cancel_btn;
+    DBHelper myDatabase;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,6 +110,11 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
         ));
 
         initFragmentReplacer(notice);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
