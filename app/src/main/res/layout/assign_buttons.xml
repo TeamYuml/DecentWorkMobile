@@ -12,12 +12,14 @@
             android:id="@+id/button_assign"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
             android:text="@string/btn_assign" />
 
         <Button
             android:id="@+id/button_remove_assign"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
             android:text="@string/btn_remove_assign" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

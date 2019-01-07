@@ -6,10 +6,10 @@
     tools:context=".fragments.SignInGoogle">
 
     <Button
+        android:id="@+id/btn_googleAuth"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:id="@+id/btn_googleAuth"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/round_google_button" />
+        android:background="@drawable/google" />
 		
 </FrameLayout>
