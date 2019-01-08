@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +37,11 @@ public class ProfileDetailsFragment extends Fragment {
     private TextView city;
     private TextView description;
     private TextView phone;
+    private TextView countText;
+    private RatingBar getratingBar;
+    private RatingBar setratingBar;
+    int count;
+    float curRate;
     private String USER_URL = VolleyInstance.getBaseUrl() + "/profiles/userProfiles/";
     private String packageName = "com.example.teamyuml.decentworkmobile.views";
     @Override
@@ -54,6 +61,20 @@ public class ProfileDetailsFragment extends Fragment {
         profession = v.findViewById(R.id.profession);
         description = v.findViewById(R.id.description);
         phone = v.findViewById(R.id.phone);
+        countText = v.findViewById(R.id.countText);
+        getratingBar = v.findViewById(R.id.getRating);
+        setratingBar = v.findViewById(R.id.setRating);
+        setratingBar.setRating(curRate);
+        getratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                DecimalFormat decimalFormat = new DecimalFormat("#.#");
+                curRate = Float.valueOf(decimalFormat.format((curRate * count + rating)
+                        / ++count));
+                setratingBar.setRating(curRate);
+                countText.setText(count + " Ratings");
+            }
+        });
         getUserData();
 
         return v;
@@ -97,6 +118,7 @@ public class ProfileDetailsFragment extends Fragment {
         profile.put("city", response.getString("city"));
         profile.put("description", response.getString("description"));
         profile.put("phone", response.getString("phone_numbers"));
+        profile.put("curRate", response.getString("rating"));
 
         return profile;
     }
