@@ -2,6 +2,7 @@ package com.example.teamyuml.decentworkmobile.fragments;
 
 import android.content.Intent;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.teamyuml.decentworkmobile.R;
 import com.example.teamyuml.decentworkmobile.VolleyInstance;
 import com.example.teamyuml.decentworkmobile.database.DBHelper;
+import com.example.teamyuml.decentworkmobile.model.Cities;
 import com.example.teamyuml.decentworkmobile.utils.CreateJson;
 import com.example.teamyuml.decentworkmobile.utils.UserAuth;
 import com.example.teamyuml.decentworkmobile.volley.ErrorHandler;
@@ -38,11 +40,10 @@ import java.util.Map;
 public class NoticeForm extends Fragment implements View.OnClickListener {
 
     private View v;
-    private int dropDownLayout = android.R.layout.simple_dropdown_item_1line;
     private EditText noticeTitle;
     private EditText noticeDescription;
-    private EditText noticeProfession;
-    private EditText noticeCity;
+    private Spinner noticeProfession;
+    private Spinner noticeCity;
     private final String NOTICE_ADD_URL = VolleyInstance.getBaseUrl() + "/notices/notices/";
     private final String USER_NOTICES_URL = VolleyInstance.getBaseUrl() + "/notices/user/notices/";
     private final String EDIT_NOTICE_URL = VolleyInstance.getBaseUrl() +"/notices/notices/";
@@ -50,7 +51,6 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
     private int requestMethod;
     FragmentManager fragmentManager;
     private Button cancel_btn;
-    DBHelper myDatabase;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,13 +60,11 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         v = inflater.inflate(R.layout.notice_form, container, false);
         noticeTitle = v.findViewById(R.id.title);
         noticeDescription = v.findViewById(R.id.description);
-        noticeProfession = v.findViewById(R.id.profession);
-        noticeCity = v.findViewById(R.id.city);
+        noticeProfession = v.findViewById(R.id.professions);
+        noticeCity = v.findViewById(R.id.cities);
         fragmentManager = getActivity().getSupportFragmentManager();
 
         v.findViewById(R.id.add_notice_btn).setOnClickListener(this);
@@ -87,8 +85,8 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
         if (fields != null) {
             noticeTitle.setText(fields.getString("title"));
             noticeDescription.setText(fields.getString("description"));
-            noticeProfession.setText(fields.getString("profession"));
-            noticeCity.setText(fields.getString("city"));
+            noticeCity.setSelection(0);
+            noticeProfession.setSelection(0);
 
             cancel_btn.setVisibility(View.VISIBLE);
             RESPONSE_URL = EDIT_NOTICE_URL + getArguments().getInt("id") + "/";
@@ -160,8 +158,8 @@ public class NoticeForm extends Fragment implements View.OnClickListener {
     private JSONObject addParams() throws JSONException {
         String title = noticeTitle.getText().toString();
         String description = noticeDescription.getText().toString();
-        String city = noticeCity.getText().toString();
-        String profession = noticeProfession.getText().toString();
+        String city = noticeCity.getSelectedItem().toString();
+        String profession = noticeProfession.getSelectedItem().toString();
 
         CreateJson cj = new CreateJson();
         cj.addStr("city", city);

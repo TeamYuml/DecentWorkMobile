@@ -2,6 +2,7 @@ package com.example.teamyuml.decentworkmobile.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -11,6 +12,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class is responsible for creating copy of the database from asset file to
@@ -102,7 +105,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void openDataBase() throws SQLException {
-        //Open the database
         String myPath = DB_PATH + DB_NAME;
         myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
     }
@@ -122,6 +124,28 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    }
+
+    public List<Cities> getCities() {
+        Cursor c = myDataBase.rawQuery("SELECT Name_City FROM Cities", null);
+        List<Cities> lst = new ArrayList<>();
+        while (c.moveToNext()) {
+            lst.add(new Cities(c.getString(0)));
+        }
+        c.close();
+
+        return lst;
+    }
+
+    public List<Professions> getProfessions() {
+        Cursor c = myDataBase.rawQuery("SELECT Name_profession FROM Professions", null);
+        List<Professions> lst = new ArrayList<>();
+        while (c.moveToNext()) {
+            lst.add(new Professions(c.getString(0)));
+        }
+        c.close();
+
+        return lst;
     }
 
 }

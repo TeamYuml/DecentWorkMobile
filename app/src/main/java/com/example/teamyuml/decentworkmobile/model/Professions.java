@@ -4,6 +4,10 @@ public class Professions {
     public int ID_profession;
     public String Name_profession;
 
+    public Professions (String profession) {
+        this.Name_profession = profession;
+    }
+
     public int getID_profession() {
         return ID_profession;
     }
@@ -18,5 +22,10 @@ public class Professions {
 
     public void setName_profession(String name_profession) {
         this.Name_profession = name_profession;
+    }
+
+    @Override
+    public String toString() {
+        return this.Name_profession;
     }
 }
