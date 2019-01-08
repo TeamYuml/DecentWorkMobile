@@ -12,20 +12,22 @@
 
         <TextView
             android:id="@+id/title_text_view"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/title"
+            android:textAlignment="center"
             android:textSize="20sp"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="120dp" />
 
         <EditText
             android:id="@+id/title"
-            android:layout_width="354dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autoLink="none"
             android:autoText="false"
             android:autofillHints=""
+            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
             android:ems="10"
             android:inputType="text"
             android:text=""
@@ -34,18 +36,20 @@
 
         <TextView
             android:id="@+id/description_text_view"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/description"
+            android:textAlignment="center"
             android:textSize="20sp"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="245dp" />
 
         <EditText
             android:id="@+id/description"
-            android:layout_width="353dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints=""
+            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
             android:inputType="text"
             android:textSize="20sp"
             tools:ignore="MissingConstraints"
@@ -54,18 +58,20 @@
 
         <TextView
             android:id="@+id/profession_text_view"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Profesja"
+            android:textAlignment="center"
             android:textSize="20sp"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="245dp" />
 
         <EditText
             android:id="@+id/profession"
-            android:layout_width="353dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints=""
+            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
             android:inputType="text"
             android:textSize="20sp"
             tools:ignore="MissingConstraints"
@@ -74,18 +80,20 @@
 
         <TextView
             android:id="@+id/EngagmentTextViewCity"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/city"
+            android:textAlignment="center"
             android:textSize="20sp"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="245dp" />
 
         <EditText
             android:id="@+id/city"
-            android:layout_width="353dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints=""
+            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
             android:inputType="text"
             android:textSize="20sp"
             tools:ignore="MissingConstraints"
@@ -103,8 +111,9 @@
 
         <Button
             android:id="@+id/add_notice_btn"
-            android:layout_width="355dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
             android:text="@string/add_notice"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="16dp"
@@ -112,8 +121,9 @@
 
         <Button
             android:id="@+id/cancel_btn"
-            android:layout_width="355dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
             android:text="Anuluj"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="16dp"
