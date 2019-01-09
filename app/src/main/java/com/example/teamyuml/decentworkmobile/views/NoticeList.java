@@ -163,6 +163,7 @@ public class NoticeList extends AppCompatActivity implements NavigationView.OnNa
             menu.removeItem(R.id.logout);
             menu.removeItem(R.id.userPanel);
             menu.removeItem(R.id.userNotices);
+            menu.removeItem(R.id.addNotice);
         }
     }
 
